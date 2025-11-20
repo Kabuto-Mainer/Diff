@@ -31,7 +31,7 @@ BinTree_t binTreeCtr ()
     tree.null->left = NULL;
     tree.null->right = NULL;
     tree.null->type = _TYPE_NUM;
-    tree.null->value = 0;
+    tree.null->value.dval = 0;
 
     tree.table_var = (NameTable_t*) calloc (1, sizeof (NameTable_t));
     if (tree.table_var == NULL)
@@ -164,17 +164,17 @@ int saveNode (FILE* stream,
     {
         case (_TYPE_OPER):
         {
-            fprintf (stream, SPEC_NAME_TABLE_NAME " ", nameTableGetName (table_cmd, node->value));
+            fprintf (stream, SPEC_NAME_TABLE_NAME " ", nameTableGetName (table_cmd, node->value.ival));
             break;
         }
         case (_TYPE_VAR):
         {
-            fprintf (stream, SPEC_NAME_TABLE_NAME " ", nameTableGetName (table_var, node->value));
+            fprintf (stream, SPEC_NAME_TABLE_NAME " ", nameTableGetName (table_var, node->value.ival));
             break;
         }
         case (_TYPE_NUM):
         {
-            fprintf (stream, SPEC_NODE_VALUE, node->value);
+            fprintf (stream, "%lg", node->value.dval);
             break;
         }
         default:
@@ -257,7 +257,7 @@ Node_t* uploadNode (Node_t* parent,
             case '+':
             {
                 node->type = _TYPE_OPER;
-                node->value = ADD_OPER;
+                node->value.ival = ADD_OPER;
                 ++ *cur_pose;
                 break;
             }
@@ -266,14 +266,14 @@ Node_t* uploadNode (Node_t* parent,
                 if (*(*cur_pose + 1) == ' ')
                 {
                     node->type = _TYPE_OPER;
-                    node->value = SUB_OPER;
+                    node->value.ival = SUB_OPER;
                     ++ *cur_pose;
                 }
                 else
                 {
                     char* new_pose = NULL;
                     node->type = _TYPE_NUM;
-                    node->value = (int) strtod (*cur_pose, &new_pose);
+                    node->value.dval = strtod (*cur_pose, &new_pose);
                     *cur_pose = new_pose;
                 }
                 break;
@@ -281,14 +281,14 @@ Node_t* uploadNode (Node_t* parent,
             case '*':
             {
                 node->type = _TYPE_OPER;
-                node->value = MUL_OPER;
+                node->value.ival = MUL_OPER;
                 ++ *cur_pose;
                 break;
             }
             case '/':
             {
                 node->type = _TYPE_OPER;
-                node->value = DIV_OPER;
+                node->value.ival = DIV_OPER;
                 ++ *cur_pose;
                 break;
             }
@@ -300,29 +300,28 @@ Node_t* uploadNode (Node_t* parent,
                 {
                     char* new_pose = NULL;
                     node->type = _TYPE_NUM;
-                    node->value = (int) strtod (*cur_pose, &new_pose);
+                    node->value.dval = strtod (*cur_pose, &new_pose);
                     *cur_pose = new_pose;
                 }
 
                 else if ((index = nameTableFind (table_cmd, *cur_pose)) != -1)
                 {
-                    printf ("SIZE: %zu\n", table_cmd->capacity);
                     node->type = _TYPE_OPER;
-                    node->value = index;
+                    node->value.ival = index;
                     *cur_pose += lenName (*cur_pose);
                 }
 
                 else if ((index = nameTableFind (table_var, *cur_pose)) == -1)
                 {
                     node->type = _TYPE_VAR;
-                    node->value = nameTableAdd (table_var, *cur_pose, 0);
+                    node->value.ival = nameTableAdd (table_var, *cur_pose, 0);
                     *cur_pose += lenName (*cur_pose);
                 }
 
                 else
                 {
                     node->type = _TYPE_VAR;
-                    node->value = index;
+                    node->value.ival = index;
                     *cur_pose += lenName (*cur_pose);
                 }
             }
@@ -420,9 +419,9 @@ int findVar (Node_t* node,
     assert (name);
 
     size_t hash = getHash (name);
-    if (table_var->data[node->value].hash == hash)
+    if (table_var->data[node->value.ival].hash == hash)
     {
-        if (strcmp (table_var->data[node->value].name, name) == 0)
+        if (strcmp (table_var->data[node->value.ival].name, name) == 0)
             return 1;
     }
 

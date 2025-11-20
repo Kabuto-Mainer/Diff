@@ -7,43 +7,43 @@ digraph {
   node [shape=plaintext, style=filled, fontname="Helvetica"];
   edge [arrowhead=vee, arrowsize=0.6, penwidth=1.2];
 
-block_0x5030000001c0 [label=<
+block_0x5040000001d0 [shape=diamond, label=<
 <TABLE CELLSPACING="0" CELLPADDING="4">
-<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x5030000001c0</B></TD></TR>
-<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=0x503000000190</TD></TR>
-<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=1</TD></TR>
+<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>D0100405000</B></TD></TR>
+<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=90100405000</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Variable</TD></TR>
 <TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value=0</TD></TR>
 <TR>
-<TD PORT="left" BGCOLOR="#ff7301ff">(nil)</TD>
-<TD PORT="right" BGCOLOR="#08ff3aff">(nil)</TD>
+<TD PORT="left" BGCOLOR="#ff7301ff">NIL</TD>
+<TD PORT="right" BGCOLOR="#08ff3aff">NIL</TD>
 </TR>
 </TABLE> >];
 
-block_0x503000000250 [label=<
+block_0x504000000210 [shape=box, label=<
 <TABLE CELLSPACING="0" CELLPADDING="4">
-<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x503000000250</B></TD></TR>
-<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=0x503000000190</TD></TR>
-<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=2</TD></TR>
+<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>10200405000</B></TD></TR>
+<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=90100405000</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Number</TD></TR>
 <TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value=6</TD></TR>
 <TR>
-<TD PORT="left" BGCOLOR="#ff7301ff">(nil)</TD>
-<TD PORT="right" BGCOLOR="#08ff3aff">(nil)</TD>
+<TD PORT="left" BGCOLOR="#ff7301ff">NIL</TD>
+<TD PORT="right" BGCOLOR="#08ff3aff">NIL</TD>
 </TR>
 </TABLE> >];
 
-block_0x503000000190 [label=<
+block_0x504000000190 [shape=circle, label=<
 <TABLE CELLSPACING="0" CELLPADDING="4">
-<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x503000000190</B></TD></TR>
-<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=0x503000000100</TD></TR>
-<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=0</TD></TR>
+<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>90100405000</B></TD></TR>
+<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=50100405000</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Operation</TD></TR>
 <TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value=0</TD></TR>
 <TR>
-<TD PORT="left" BGCOLOR="#ff7301ff">0x5030000001c0</TD>
-<TD PORT="right" BGCOLOR="#08ff3aff">0x503000000250</TD>
+<TD PORT="left" BGCOLOR="#ff7301ff">D0100405000</TD>
+<TD PORT="right" BGCOLOR="#08ff3aff">10200405000</TD>
 </TR>
 </TABLE> >];
 
-block_0x503000000190:right -> block_0x503000000250:root [color="#0901faff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
-block_0x503000000190:left -> block_0x5030000001c0:root [color="#0901faff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000190:right -> block_0x504000000210:root [color="#0901faff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000190:left -> block_0x5040000001d0:root [color="#0901faff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
 
 }

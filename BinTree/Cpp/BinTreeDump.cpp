@@ -1,10 +1,12 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <assert.h>
+#include <string.h>
 
 #include "../../Common/Common.h"
 #include "../Header/BinTreeType.h"
 #include "../Header/BinTreeConfig.h"
+#include "../Header/BinTreeConst.h"
 #include "../Header/BinTreeFunc.h"
 
 
@@ -104,38 +106,109 @@ int createGraph (BinTree_t* tree)
 /**
  * @brief Рекурсивная функция создания блоков графа
  * @param [in] node Указатель на текущий узел
- * @param [in] file Указатель на dot файл
+ * @param [in] stream Указатель на dot файл
  * @return 0
 */
 int createBlock (Node_t* node,
-                 FILE* file)
+                 FILE* stream)
 {
     assert (node);
+    assert (stream);
 
-    if (node->left)
-    {
-        createBlock (node->left, file);
-    }
-
-    if (node->right)
-    {
-        createBlock (node->right, file);
-    }
-
-
-    fprintf (file,
-             "block_%p [label=<\n<TABLE CELLSPACING=\"0\" CELLPADDING=\"4\">\n"
-             "<TR><TD PORT=\"root\" BGCOLOR=\"#0308f9ff\" COLSPAN=\"2\"><B>%p</B></TD></TR>\n"
-             "<TR><TD BGCOLOR=\"#b209ccff\" COLSPAN=\"2\">ROOT=%p</TD></TR>\n"
-             "<TR><TD BGCOLOR=\"#f46b8bff\" COLSPAN=\"2\">type=%d</TD></TR>\n"
-             "<TR><TD BGCOLOR=\"#f46b8bff\" COLSPAN=\"2\">value=" SPEC_NODE_VALUE "</TD></TR>\n"
-             "<TR>\n<TD PORT=\"left\" BGCOLOR=\"#ff7301ff\">%p</TD>\n"
-             "<TD PORT=\"right\" BGCOLOR=\"#08ff3aff\">%p</TD>\n</TR>\n</TABLE> >];\n\n",
-             node, node, node->parent, node->type, node->value, node->left, node->right);
+    if (node->left)     { createBlock (node->left, stream); }
+    if (node->right)    { createBlock (node->right, stream); }
+    printFullBlock (node, stream);
 
     return 0;
 }
 // -------------------------------------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------------------------------------
+/**
+ @brief Функция описания блока дерева
+ @param [in] node Узел, блок которого описывается
+ @param [in] stream Файл для вывода
+*/
+int printFullBlock (Node_t* node,
+                    FILE* stream)
+{
+    assert (node);
+    assert (stream);
+
+    char shape[20] = "";
+    char type[20] = "";
+
+    if (node->type == _TYPE_OPER)
+    {
+        strcpy (shape, "circle");
+        strcpy (type, BIN_TREE_NAME_TYPES_NODE[_TYPE_OPER]);
+    }
+    else if (node->type == _TYPE_VAR)
+    {
+        strcpy (shape, "diamond");
+        strcpy (type, BIN_TREE_NAME_TYPES_NODE[_TYPE_VAR]);
+    }
+    else
+    {
+        strcpy (shape, "box");
+        strcpy (type, BIN_TREE_NAME_TYPES_NODE[_TYPE_NUM]);
+    }
+
+    fprintf (stream, "block_%p [shape=%s, label=<\n<TABLE CELLSPACING=\"0\" CELLPADDING=\"4\">\n"
+            "<TR><TD PORT=\"root\" BGCOLOR=\"#0308f9ff\" COLSPAN=\"2\"><B>", node, shape);
+    printAddress (stream, node);
+
+    fprintf (stream, "</B></TD></TR>\n"
+             "<TR><TD BGCOLOR=\"#b209ccff\" COLSPAN=\"2\">ROOT=");
+    printAddress (stream, node->parent);
+
+    fprintf (stream, "</TD></TR>\n"
+             "<TR><TD BGCOLOR=\"#f46b8bff\" COLSPAN=\"2\">type=%s</TD></TR>\n"
+             "<TR><TD BGCOLOR=\"#f46b8bff\" COLSPAN=\"2\">value=", type);
+
+    if (node->type == _TYPE_NUM)    { fprintf (stream, "%lg", node->value.dval); }
+    else                            { fprintf (stream, "%d", node->value.ival); }
+
+    fprintf (stream, "</TD></TR>\n"
+             "<TR>\n<TD PORT=\"left\" BGCOLOR=\"#ff7301ff\">");
+    printAddress (stream, node->left);
+
+    fprintf (stream, "</TD>\n"
+             "<TD PORT=\"right\" BGCOLOR=\"#08ff3aff\">");
+    printAddress (stream, node->right);
+
+    fprintf (stream, "</TD>\n</TR>\n</TABLE> >];\n\n");
+
+    return 0;
+}
+// -------------------------------------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------------------------------------
+/**
+ @brief Функция распечатки адреса в HEX-формате
+ @param [in] stream Файл для вывода
+ @param [in] address Полученный адрес
+*/
+int printAddress (FILE* stream,
+                  const void* address)
+{
+    assert (stream);
+
+    if (address == NULL)
+    {
+        fprintf (stream, "NIL");
+        return 0;
+    }
+
+    const unsigned char* bytes = (const unsigned char*) &address;
+    size_t size = sizeof (address);
+
+    for (size_t i = 0; i < size; i++)     { fprintf (stream, "%X", bytes[i]); }
+
+    return 0;
+}
+// -------------------------------------------------------------------------------------------------------
+
 
 // -------------------------------------------------------------------------------------------------------
 /**
