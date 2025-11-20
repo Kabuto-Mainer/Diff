@@ -5,12 +5,18 @@
 
 int main ()
 {
-    BinTree_t tree = binTreeCtr ();
+    BinTree_t tree = {};
+    binTreeCtr (&tree);
     binTreeUpload (&tree);
     dumpTree (&tree, "Test");
-    binTreeSave (&tree);
 
-    binTreeDtr (&tree);
+    BinTree_t new_tree = {};
+    binTreeDiff (&tree, &new_tree);
+    dumpTree (&new_tree, "Test");
+
+    binTreeSave (&new_tree);
+
+    binTreeDtr (&new_tree);
 
     return 0;
 }

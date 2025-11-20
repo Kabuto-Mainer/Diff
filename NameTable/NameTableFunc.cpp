@@ -99,7 +99,7 @@ int compareName (NameType_t name_1,
  @brief Функция, возвращающая имя, лежащее под полученным индексом
  @param [in] table Указатель на таблицу имен
  @param [in] index Полученный индекс
- @return Имя
+ @return Имя, иначе NULL
 */
 NameType_t nameTableGetName (NameTable_t* table,
                              int index)
@@ -114,15 +114,31 @@ NameType_t nameTableGetName (NameTable_t* table,
 
 // ---------------------------------------------------------------------------------------------------
 /**
+ @brief Функция получения текущего размера таблицы имен
+ @param [in] table Указатель на структуру таблицы
+ @return Размер
+*/
+size_t nameTableGetSize (NameTable_t* table)
+{
+    assert (table);
+    return table->size;
+}
+// ---------------------------------------------------------------------------------------------------
+
+
+// ---------------------------------------------------------------------------------------------------
+/**
  @brief Функция добавления элемента в таблицу имен
  @param [in] table Указатель на таблицу имен
  @param [in] name Имя добавляемого объекта
  @param [in] value Значение, соответствующее имени
+ @param [in] len_name Длина имени
  @return Индекс имени в таблице имен (при ошибке -1)
 */
 int nameTableAdd (NameTable_t* table,
                   NameType_t name,
-                  NameValue_t value)
+                  NameValue_t value,
+                  size_t len_name)
 {
     assert (table);
     ASSERT_NAME_TABLE_NAME (name);
@@ -137,9 +153,9 @@ int nameTableAdd (NameTable_t* table,
         table->capacity *= 2;
     }
 
-    table->data[table->size].name = strdup (name);
+    table->data[table->size].name = strndup (name, len_name);
     table->data[table->size].value = value;
-    table->data[table->size].hash = getHash (name);
+    table->data[table->size].hash = getHash (table->data[table->size].name);
     table->size++;
 
     return (int) table->size - 1;

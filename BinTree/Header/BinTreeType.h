@@ -35,6 +35,7 @@ struct BinTree_t
 {
     Node_t* null;
     size_t size;
+    char* diff_var;
     NameTable_t* table_var;
     NameTable_t* table_cmd;
 };

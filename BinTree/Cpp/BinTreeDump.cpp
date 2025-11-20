@@ -61,6 +61,7 @@ int dumpTree (BinTree_t* tree,
                 STANDARD_DUMP_IMAGE_ADR, AMOUNT_DUMP_IMAGE,
                 tree->size * STANDARD_SIZE_GRAPH_BLOCK);
     }
+    AMOUNT_DUMP_IMAGE++;
 
     fclose (html_file);
     return 0;

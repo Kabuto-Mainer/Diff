@@ -17,34 +17,34 @@
 // ---------------------------------------------------------------------------------------------------
 /**
  @brief Функция создания бинарного дерева
+ @param [in] tree Структура дерева
  @note Сразу создается первый элемент
- @return Структуру дерева
 */
-BinTree_t binTreeCtr ()
+int binTreeCtr (BinTree_t* tree)
 {
-    BinTree_t tree = {};
-    tree.size = 1;
+    assert (tree);
+    tree->size = 1;
+    tree->null = newNode ();
 
-    tree.null = newNode ();
+    tree->null->parent = NULL;
+    tree->null->left = NULL;
+    tree->null->right = NULL;
+    tree->null->type = _TYPE_NUM;
+    tree->null->value.dval = 0;
+    tree->diff_var = NULL;
 
-    tree.null->parent = NULL;
-    tree.null->left = NULL;
-    tree.null->right = NULL;
-    tree.null->type = _TYPE_NUM;
-    tree.null->value.dval = 0;
-
-    tree.table_var = (NameTable_t*) calloc (1, sizeof (NameTable_t));
-    if (tree.table_var == NULL)
+    tree->table_var = (NameTable_t*) calloc (1, sizeof (NameTable_t));
+    if (tree->table_var == NULL)
         EXIT_FUNC("NULL calloc", {});
 
-    nameTableCtr (tree.table_var);
+    nameTableCtr (tree->table_var);
 
-    tree.table_cmd = (NameTable_t*) calloc (1, sizeof (NameTable_t));
-    if (tree.table_cmd == NULL)
+    tree->table_cmd = (NameTable_t*) calloc (1, sizeof (NameTable_t));
+    if (tree->table_cmd == NULL)
         EXIT_FUNC("NULL calloc", {});
 
-    tree.table_cmd->data = (NameTableVar_t*) calloc (sizeof (CODE_WORDS) / sizeof (CODE_WORDS[0]), sizeof (NameTableVar_t));
-    if (tree.table_cmd->data == NULL)
+    tree->table_cmd->data = (NameTableVar_t*) calloc (sizeof (CODE_WORDS) / sizeof (CODE_WORDS[0]), sizeof (NameTableVar_t));
+    if (tree->table_cmd->data == NULL)
         EXIT_FUNC("NULL calloc", {});
 
     // Пусть мы и копируем данные, которые лежат в константах, но благодаря этому мв получаем:
@@ -54,14 +54,14 @@ BinTree_t binTreeCtr ()
     for (size_t i = 0; i < sizeof (CODE_WORDS) / sizeof (CODE_WORDS[0]); i++)
     {
         // printf ("CMD: %s\n", CODE_WORDS[i].name);
-        tree.table_cmd->data[i].name = strdup (CODE_WORDS[i].name);
-        tree.table_cmd->data[i].value = CODE_WORDS[i].type;
-        tree.table_cmd->data[i].hash = CODE_WORDS[i].hash;
+        tree->table_cmd->data[i].name = strdup (CODE_WORDS[i].name);
+        tree->table_cmd->data[i].value = CODE_WORDS[i].type;
+        tree->table_cmd->data[i].hash = CODE_WORDS[i].hash;
     }
-    tree.table_cmd->size = sizeof (CODE_WORDS) / sizeof (CODE_WORDS[0]);
-    tree.table_cmd->capacity = tree.table_cmd->size;
+    tree->table_cmd->size = sizeof (CODE_WORDS) / sizeof (CODE_WORDS[0]);
+    tree->table_cmd->capacity = tree->table_cmd->size;
 
-    return tree;
+    return 0;
 }
 // ---------------------------------------------------------------------------------------------------
 
@@ -93,6 +93,8 @@ int binTreeDtr (BinTree_t* tree)
     deleteNode (tree->null);
     nameTableDtr (tree->table_var);
     nameTableDtr (tree->table_cmd);
+
+    if (tree->diff_var != NULL)     { free (tree->diff_var); }
 
     return 0;
 }
@@ -213,7 +215,7 @@ int binTreeUpload (BinTree_t* tree)
     fclose (stream);
 
     binTreeDtr (tree);
-    *tree = binTreeCtr ();
+    binTreeCtr (tree);
 
     char* buffer_to_free = buffer;
     tree->null = uploadNode (tree->null, &buffer, tree->table_var, tree->table_cmd);
@@ -314,7 +316,7 @@ Node_t* uploadNode (Node_t* parent,
                 else if ((index = nameTableFind (table_var, *cur_pose)) == -1)
                 {
                     node->type = _TYPE_VAR;
-                    node->value.ival = nameTableAdd (table_var, *cur_pose, 0);
+                    node->value.ival = nameTableAdd (table_var, *cur_pose, 0, (size_t) lenName (*cur_pose));
                     *cur_pose += lenName (*cur_pose);
                 }
 
