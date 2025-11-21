@@ -365,32 +365,42 @@ Node_t* createComplex (Node_t* new_oper,
 }
 // --------------------------------------------------------------------------------------------------
 
-// // --------------------------------------------------------------------------------------------------
-// Node_t* calculateNumConst (Node_t* node)
-// {
-//     assert (node);
 
-//     if (node->type == _TYPE_VAR)
-//         return NULL;
+// --------------------------------------------------------------------------------------------------
+/**
+ @brief Рекурсивная функция сокращения констант
+ @param [in] node Указатель на корень поддерева
+ @return node
+*/
+Node_t* calculateNum (Node_t* node)
+{
+    assert (node);
 
-//     if (node->type = _TYPE_NUM)
-//         return node;
+    if (node->type == _TYPE_VAR)
+    {
+        return NULL;
+    }
 
-//     if (node
+    if (node->type == _TYPE_NUM)
+        return node;
 
-//     Node_t* left = NULL;
-//     Node_t* right = NULL;
+    Node_t* left = NULL;
+    Node_t* right = NULL;
 
-//     if (node->left)
-//         left = calculateNum (node->left);
+    if (node->left)
+        left = calculateNum (node->left);
 
-//     if (node->right)
-//         right = calculateNum (node->right);
+    if (node->right)
+        right = calculateNum (node->right);
 
-//     if (right && left)
-//     {
-//         switch
-//     }
+    if (right && left)
+        return CODE_WORDS[node->value.ival].func (node);
+
+    return NULL;
+}
+// --------------------------------------------------------------------------------------------------
 
 
-// }
+
+
+
