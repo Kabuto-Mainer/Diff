@@ -370,11 +370,14 @@ Node_t* createComplex (Node_t* new_oper,
 /**
  @brief Рекурсивная функция сокращения констант
  @param [in] node Указатель на корень поддерева
+ @param [in] size Указатель на размер дерева
  @return node
 */
-Node_t* calculateNum (Node_t* node)
+Node_t* calculateNum (Node_t* node,
+                      size_t* size)
 {
     assert (node);
+    assert (size);
 
     if (node->type == _TYPE_VAR)
     {
@@ -394,13 +397,17 @@ Node_t* calculateNum (Node_t* node)
         right = calculateNum (node->right);
 
     if (right && left)
+    {
+        *size -= 2; // Сокращение именно на 2 блока
         return CODE_WORDS[node->value.ival].func (node);
+    }
 
     return NULL;
 }
 // --------------------------------------------------------------------------------------------------
 
-
+// --------------------------------------------------------------------------------------------------
+Node_t*
 
 
 

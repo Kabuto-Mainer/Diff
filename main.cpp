@@ -13,7 +13,7 @@ int main ()
     BinTree_t new_tree = {};
     binTreeDiff (&tree, &new_tree);
     binTreeDumpHTML (&new_tree, "Test");
-    calculateNum (new_tree.null);
+    calculateNum (new_tree.null, &(new_tree.size));
     binTreeDumpHTML (&new_tree, "Test");
 
 

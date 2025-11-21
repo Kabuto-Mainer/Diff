@@ -232,9 +232,11 @@ Node_t* createComplex (Node_t* new_oper,
 /**
  @brief Рекурсивная функция сокращения констант
  @param [in] node Указатель на корень поддерева
+ @param [in] size Указатель на размер дерева
  @return node
 */
-Node_t* calculateNum (Node_t* node);
+Node_t* calculateNum (Node_t* node,
+                      size_t* size);
 // --------------------------------------------------------------------------------------------------
 
 
