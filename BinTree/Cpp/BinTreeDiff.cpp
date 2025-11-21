@@ -55,7 +55,7 @@ int binTreeDiff (BinTree_t* old_tree,
 */
 Node_t* diffNode (Node_t* old_node,
                   Node_t* new_parent,
-                  const char* name_var,
+                  char* name_var,
                   NameTable_t* table_var)
 {
     assert (old_node);
@@ -76,13 +76,30 @@ Node_t* diffNode (Node_t* old_node,
 
     switch (old_node->value.ival)
     {
-        case (ADD_OPER): { return ADD_(dL, dR); }
-        case (SUB_OPER): { return SUB_(dL, dR); }
-        case (MUL_OPER): { return ADD_( MUL_(dL, cR), MUL_(cL, dR) ); }
-        case (DIV_OPER): { return DIV_( SUB_( MUL_(dL, cR), MUL_(cL, dR) ), MUL_(cR, cR)); }
-        case (SIN_OPER): { return COMPLEX_ ( COS_ (cR) ); }
-        case (COS_OPER): { return COMPLEX_ ( MUL_ ( SIN_ (cR), NUM_NODE_(-1) ) ); }
-        case (TAN_OPER): { return COMPLEX_ ( DIV_ (NUM_NODE_(1), POW_( COS_ (cR), NUM_NODE_(2)) ) ); }
+        case (ADD_OPER):   { return ADD_(dL, dR); }
+        case (SUB_OPER):   { return SUB_(dL, dR); }
+        case (MUL_OPER):   { return ADD_( MUL_(dL, cR), MUL_(cL, dR) ); }
+        case (DIV_OPER):   { return DIV_( SUB_( MUL_(dL, cR), MUL_(cL, dR) ), MUL_(cR, cR)); }
+        case (SIN_OPER):   { return COMPLEX_ ( COS_ (cR) ); }
+        case (COS_OPER):   { return COMPLEX_ ( MUL_ ( SIN_ (cR), NUM_NODE_(-1) ) ); }
+        case (TAN_OPER):   { return COMPLEX_ ( DIV_ (NUM_NODE_(1), POW_( COS_ (cR), NUM_NODE_(2)) ) ); }
+        case (COT_OPER):   { return COMPLEX_ ( DIV_ (NUM_NODE_(-1), POW_( SIN_ (cR), NUM_NODE_(2)) ) ); }
+        case (ASIN_OPER):  { return COMPLEX_ ( DIV_ (NUM_NODE_(1), POW_( SUB_( NUM_NODE_(1), POW_(cR, NUM_NODE_(2)) ), NUM_NODE_(0.5) ))); }
+        case (ACOS_OPER):  { return COMPLEX_ ( DIV_ (NUM_NODE_(-1), POW_( SUB_( NUM_NODE_(1), POW_(cR, NUM_NODE_(2)) ), NUM_NODE_(0.5) ))); }
+        case (ATAN_OPER):  { return COMPLEX_ ( DIV_ (NUM_NODE_(1), ADD_ (NUM_NODE_(1), POW_(cR, NUM_NODE_(2)) )) ); }
+        case (ACOT_OPER):  { return COMPLEX_ ( DIV_ (NUM_NODE_(-1), ADD_ (NUM_NODE_(1), POW_(cR, NUM_NODE_(2)) )) ); }
+        case (LOG_OPER):   { return COMPLEX_ ( DIV_ (NUM_NODE_(1), MUL_ (cR, LN_ (cL)) ) ); }
+        case (LN_OPER):    { return COMPLEX_ ( DIV_ (NUM_NODE_(1), cR) ); }
+        case (POW_OPER):   { return COMPLEX_ ( MUL_ (cR, POW_(cL, (SUB_ (cR, NUM_NODE_(1))) ))); }
+        case (EXP_OPER):   { return COMPLEX_ ( EXP_ (cR) ); }
+        case (SH_OPER):    { return COMPLEX_ ( CH_ (cR) ); }
+        case (CH_OPER):    { return COMPLEX_ ( SH_ (cR) ); }
+        case (TH_OPER):    { return COMPLEX_ ( DIV_ (NUM_NODE_(1), POW_(CH_(cR), NUM_NODE_(2)) )); }
+        case (CTH_OPER):   { return COMPLEX_ ( DIV_ (NUM_NODE_(-1), POW_(SH_(cR), NUM_NODE_(2)) )); }
+        case (ASH_OPER):   { return COMPLEX_ ( DIV_ (NUM_NODE_(1), POW_(ADD_(POW_(cR, NUM_NODE_(2)), NUM_NODE_(1)), NUM_NODE_(0.5)))); }
+        case (ACH_OPER):   { return COMPLEX_ ( DIV_ (NUM_NODE_(1), POW_(SUB_(POW_(cR, NUM_NODE_(2)), NUM_NODE_(1)), NUM_NODE_(0.5)))); }
+        case (ATH_OPER):   { return COMPLEX_ ( DIV_ (NUM_NODE_(1), SUB_(NUM_NODE_(1), POW_(cR, NUM_NODE_(2))) )); }
+        case (ACTH_OPER):  { return COMPLEX_ ( DIV_ (NUM_NODE_(1), SUB_(NUM_NODE_(1), POW_(cR, NUM_NODE_(2))) )); }
 
         default: { return NULL; }
     }
@@ -270,7 +287,7 @@ Node_t* createComplex (Node_t* new_oper,
                        Node_t* old_oper,
                        Node_t* parent,
                        NameTable_t* table_var,
-                       const char* name_var)
+                       char* name_var)
 {
     assert (new_oper);
     assert (old_oper);

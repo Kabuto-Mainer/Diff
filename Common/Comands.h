@@ -26,7 +26,16 @@ enum ALL_OPER
     ACOT_OPER  = 11,
     LOG_OPER   = 12,
     LN_OPER    = 13,
-    POW_OPER   = 14
+    POW_OPER   = 14,
+    EXP_OPER   = 15,
+    SH_OPER    = 16,
+    CH_OPER    = 17,
+    TH_OPER    = 18,
+    CTH_OPER   = 19,
+    ASH_OPER   = 20,
+    ACH_OPER   = 21,
+    ATH_OPER   = 22,
+    ACTH_OPER  = 23
 };
 // ---------------------------------------------------------------------------------------------------
 
@@ -61,7 +70,16 @@ const OperData_t CODE_WORDS[] =
     { "acot",  0,   ACOT_OPER},
     { "log",   0,   LOG_OPER},
     { "ln",    0,   LN_OPER},
-    { "pow",   0,   POW_OPER}
+    { "pow",   0,   POW_OPER},
+    { "exp",   0,   EXP_OPER},
+    { "sh",    0,   SH_OPER},
+    { "ch",    0,   CH_OPER},
+    { "th",    0,   TH_OPER},
+    { "cth",   0,   CTH_OPER},
+    { "ash",   0,   ASH_OPER},
+    { "ach",   0,   ACH_OPER},
+    { "ath",   0,   ATH_OPER},
+    { "acth",  0,   ACTH_OPER}
 };
 // ---------------------------------------------------------------------------------------------------
 /// @brief Команда, начиная с которой начинается цикл поиска команды

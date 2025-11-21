@@ -86,23 +86,32 @@
 // --------------------------------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------------------------------
-/// @brief
+/// @brief Возведение в степень
 #define POW_(l, r) ( createOperNodeBin (l, r, new_parent, POW_OPER) )
 
-/// @brief
+/// @brief Возведение экспоненты
+#define EXP_(r) ( createOperNodeAtom (r, new_parent, EXP_OPER) )
+
+/// @brief Логорифм с переменным основанием
 #define LOG_(l, r) ( createOperNodeBin (l, r, new_parent, LOG_OPER) )
 
-/// @brief
+/// @brief Натуральный логорифм
 #define LN_(r) ( createOperNodeBin (NUM_NODE_(M_E), r, new_parent, LN_OPER) )
 // --------------------------------------------------------------------------------------------------
 
+// --------------------------------------------------------------------------------------------------
+/// @brief
+#define SH_(r) ( createOperNodeAtom (r, new_parent, SH_OPER) )
+
+/// @brief
+#define CH_(r) ( createOperNodeAtom (r, new_parent, CH_OPER) )
 
 // --------------------------------------------------------------------------------------------------
 /// @brief Создание числового узла
 #define NUM_NODE_(value) ( createNumNode (new_parent, value) )
 
 /// @brief Создание узла с переменной
-#define VAR_NODE_(value) ( createVarNode (new_parent, value) )
+#define VAR_NODE_(value) ( createVarNode (new_parent, nameTableFind (table_var, name_var)) )
 // --------------------------------------------------------------------------------------------------
 
 

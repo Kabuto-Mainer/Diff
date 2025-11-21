@@ -137,7 +137,7 @@ int binTreeDiff (BinTree_t* old_tree,
 */
 Node_t* diffNode (Node_t* old_node,
                   Node_t* new_parent,
-                  const char* name_var,
+                  char* name_var,
                   NameTable_t* table_var);
 // --------------------------------------------------------------------------------------------------
 
@@ -170,9 +170,9 @@ int getVarDiff (BinTree_t* tree);
  @return Указатель на новой узел
 */
 Node_t* createOperNodeBin (Node_t* left,
-                        Node_t* right,
-                        Node_t* parent,
-                        ALL_OPER oper);
+                           Node_t* right,
+                           Node_t* parent,
+                           ALL_OPER oper);
 // --------------------------------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------------------------------
@@ -225,7 +225,7 @@ Node_t* createComplex (Node_t* new_oper,
                        Node_t* old_oper,
                        Node_t* parent,
                        NameTable_t* table_var,
-                       const char* name_var);
+                       char* name_var);
 // -------------------------------------------------------------------------------------------------------
 
 
