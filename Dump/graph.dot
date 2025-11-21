@@ -1,49 +1,51 @@
 digraph {
   rankdir=UD;
   bgcolor="#1e1e1e"
-  splines=ortho;
   nodesep=0.4;
   ranksep=0.6;
   node [shape=plaintext, style=filled, fontname="Helvetica"];
   edge [arrowhead=vee, arrowsize=0.6, penwidth=1.2];
 
-block_0x5040000002d0 [shape=box, label=<
-<TABLE CELLSPACING="0" CELLPADDING="4">
-<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>D0200405000</B></TD></TR>
-<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=50200405000</TD></TR>
-<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Number</TD></TR>
-<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value=1</TD></TR>
-<TR>
-<TD PORT="left" BGCOLOR="#ff7301ff">NIL</TD>
-<TD PORT="right" BGCOLOR="#08ff3aff">NIL</TD>
-</TR>
-</TABLE> >];
-
-block_0x504000000290 [shape=box, label=<
-<TABLE CELLSPACING="0" CELLPADDING="4">
-<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>90200405000</B></TD></TR>
-<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=50200405000</TD></TR>
-<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Number</TD></TR>
-<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value=0</TD></TR>
-<TR>
-<TD PORT="left" BGCOLOR="#ff7301ff">NIL</TD>
-<TD PORT="right" BGCOLOR="#08ff3aff">NIL</TD>
-</TR>
-</TABLE> >];
-
-block_0x504000000310 [shape=circle, label=<
-<TABLE CELLSPACING="0" CELLPADDING="4">
-<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>10300405000</B></TD></TR>
-<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=50200405000</TD></TR>
-<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Operation</TD></TR>
-<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value=0</TD></TR>
-<TR>
-<TD PORT="left" BGCOLOR="#ff7301ff">D0200405000</TD>
-<TD PORT="right" BGCOLOR="#08ff3aff">90200405000</TD>
-</TR>
-</TABLE> >];
-
-block_0x504000000310:right -> block_0x504000000290:root [color="#fa0101ff", penwidth = 1.5, arrowsize = 0.6, constraint = true];
-block_0x504000000310:left -> block_0x5040000002d0:root [color="#fa0101ff", penwidth = 1.5, arrowsize = 0.6, constraint = true];
+block_0x504000000810 [shape=box, style=filled, fillcolor="#0f32e0ff", label="1"];
+block_0x504000000750 [shape=diamond, style=filled, fillcolor="#1bc32cff", label="'x'(0)"];
+block_0x504000000790 [shape=circle, style=filled, fillcolor="#bd0fbaff", label="'cos'(5)"];
+block_0x5040000007d0 [shape=circle, style=filled, fillcolor="#bd0fbaff", label="'*'(2)"];
+block_0x504000000710 [shape=box, style=filled, fillcolor="#0f32e0ff", label="3"];
+block_0x504000000850 [shape=circle, style=filled, fillcolor="#bd0fbaff", label="'*'(2)"];
+block_0x504000000690 [shape=diamond, style=filled, fillcolor="#1bc32cff", label="'x'(0)"];
+block_0x504000000650 [shape=circle, style=filled, fillcolor="#bd0fbaff", label="'sin'(4)"];
+block_0x504000000610 [shape=box, style=filled, fillcolor="#0f32e0ff", label="0"];
+block_0x5040000006d0 [shape=circle, style=filled, fillcolor="#bd0fbaff", label="'*'(2)"];
+block_0x504000000890 [shape=circle, style=filled, fillcolor="#bd0fbaff", label="'+'(0)"];
+block_0x5040000005d0 [shape=box, style=filled, fillcolor="#0f32e0ff", label="1"];
+block_0x504000000510 [shape=box, style=filled, fillcolor="#0f32e0ff", label="4"];
+block_0x504000000490 [shape=diamond, style=filled, fillcolor="#1bc32cff", label="'x'(0)"];
+block_0x504000000410 [shape=box, style=filled, fillcolor="#0f32e0ff", label="4"];
+block_0x5040000003d0 [shape=box, style=filled, fillcolor="#0f32e0ff", label="1"];
+block_0x504000000450 [shape=circle, style=filled, fillcolor="#bd0fbaff", label="'-'(1)"];
+block_0x5040000004d0 [shape=circle, style=filled, fillcolor="#bd0fbaff", label="'pow'(14)"];
+block_0x504000000550 [shape=circle, style=filled, fillcolor="#bd0fbaff", label="'*'(2)"];
+block_0x504000000590 [shape=circle, style=filled, fillcolor="#bd0fbaff", label="'*'(2)"];
+block_0x5040000008d0 [shape=circle, style=filled, fillcolor="#bd0fbaff", label="'+'(0)"];
+block_0x504000000790 -> block_0x504000000750 [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x5040000007d0 -> block_0x504000000790 [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x5040000007d0 -> block_0x504000000810 [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000850 -> block_0x504000000710 [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000850 -> block_0x5040000007d0 [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000650 -> block_0x504000000690 [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x5040000006d0 -> block_0x504000000610 [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x5040000006d0 -> block_0x504000000650 [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000890 -> block_0x5040000006d0 [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000890 -> block_0x504000000850 [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000450 -> block_0x5040000003d0 [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000450 -> block_0x504000000410 [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x5040000004d0 -> block_0x504000000450 [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x5040000004d0 -> block_0x504000000490 [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000550 -> block_0x5040000004d0 [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000550 -> block_0x504000000510 [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000590 -> block_0x504000000550 [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000590 -> block_0x5040000005d0 [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x5040000008d0 -> block_0x504000000590 [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x5040000008d0 -> block_0x504000000890 [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
 
 }

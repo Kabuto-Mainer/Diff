@@ -61,6 +61,9 @@ int binTreeCtr (BinTree_t* tree)
     tree->table_cmd->size = sizeof (CODE_WORDS) / sizeof (CODE_WORDS[0]);
     tree->table_cmd->capacity = tree->table_cmd->size;
 
+    createHtml ();
+    createLaTex ();
+
     return 0;
 }
 // ---------------------------------------------------------------------------------------------------
@@ -220,9 +223,11 @@ int binTreeUpload (BinTree_t* tree)
     char* buffer_to_free = buffer;
     tree->null = uploadNode (tree->null, &buffer, tree->table_var, tree->table_cmd);
     free (tree->null->parent);
+    tree->null->parent = NULL;
     free (buffer_to_free);
     // Нулевой элемент необходим в дереве для его существования, но в загружено дереве он мешает
 
+    dumpToLaTex (tree->null, tree->table_var);
     return 0;
 }
 // ---------------------------------------------------------------------------------------------------
@@ -421,7 +426,7 @@ int findVar (Node_t* node,
     assert (name);
 
     size_t hash = getHash (name);
-    if (table_var->data[node->value.ival].hash == hash)
+    if (node->type == _TYPE_VAR && table_var->data[node->value.ival].hash == hash)
     {
         if (strcmp (table_var->data[node->value.ival].name, name) == 0)
             return 1;

@@ -9,6 +9,8 @@
 #include "../Header/BinTreeConst.h"
 #include "../Header/BinTreeFunc.h"
 
+#include "../../NameTable/NameTableFunc.h"
+
 
 // -------------------------------------------------------------------------------------------------------
 /// @brief Счетчик текущего количества изображений, полученных с помощью graphviz
@@ -18,12 +20,12 @@ static int AMOUNT_DUMP_IMAGE = 0;
 
 // -------------------------------------------------------------------------------------------------------
 /**
- * @brief Функция дампа дерева
- * @param [in] tree Указатель на структуру дерева
- * @param [in] reason Причина дампа
+ @brief Функция дампа дерева
+ @param [in] tree Указатель на структуру дерева
+ @param [in] reason Причина дампа
 */
-int dumpTree (BinTree_t* tree,
-              const char* reason)
+int binTreeDumpHTML (BinTree_t* tree,
+                     const char* reason)
 {
     assert (tree);
 
@@ -70,9 +72,9 @@ int dumpTree (BinTree_t* tree,
 
 // -------------------------------------------------------------------------------------------------------
 /**
- * @brief Функция создания графа по дереву
- * @param [in] tree Указатель на причину дампа
- * @return 0 (если не было ошибок), иначе 1
+ @brief Функция создания графа по дереву
+ @param [in] tree Указатель на причину дампа
+ @return 0 (если не было ошибок), иначе 1
 */
 int createGraph (BinTree_t* tree)
 {
@@ -88,13 +90,13 @@ int createGraph (BinTree_t* tree)
              "digraph {\n"
              "  rankdir=UD;\n"
              "  bgcolor=\"#1e1e1e\"\n"
-             "  splines=ortho;\n"
+            //  "  splines=ortho;\n"
              "  nodesep=0.4;\n"
              "  ranksep=0.6;\n"
              "  node [shape=plaintext, style=filled, fontname=\"Helvetica\"];\n"
              "  edge [arrowhead=vee, arrowsize=0.6, penwidth=1.2];\n\n");
 
-    createBlock (tree->null, file);
+    createBlock (tree->null, file, tree->table_var, tree->table_cmd);
     createLine (tree->null, file);
 
     fprintf (file, "\n}\n");
@@ -105,54 +107,72 @@ int createGraph (BinTree_t* tree)
 
 // -------------------------------------------------------------------------------------------------------
 /**
- * @brief Рекурсивная функция создания блоков графа
- * @param [in] node Указатель на текущий узел
- * @param [in] stream Указатель на dot файл
- * @return 0
+ @brief Рекурсивная функция создания блоков графа
+ @param [in] node Указатель на текущий узел
+ @param [in] stream Указатель на dot файл
+ @param [in] table_var Таблица имен для переменных
+ @param [in] table_cmd Таблица имен для кодовых слов
 */
 int createBlock (Node_t* node,
-                 FILE* stream)
+                 FILE* stream,
+                 NameTable_t* table_var,
+                 NameTable_t* table_cmd)
 {
     assert (node);
     assert (stream);
 
-    if (node->left)     { createBlock (node->left, stream); }
-    if (node->right)    { createBlock (node->right, stream); }
-    printFullBlock (node, stream);
+    if (node->left)     { createBlock (node->left, stream, table_var, table_cmd); }
+    if (node->right)    { createBlock (node->right, stream, table_var, table_cmd); }
+    printFullBlock (node, stream, table_var, table_cmd);
 
     return 0;
 }
 // -------------------------------------------------------------------------------------------------------
 
+#ifdef DEBUG_MODE
 // -------------------------------------------------------------------------------------------------------
 /**
- @brief Функция описания блока дерева
+ @brief Функция описания блока дерева для полного дампа
  @param [in] node Узел, блок которого описывается
  @param [in] stream Файл для вывода
+ @param [in] table_var Таблица имен для переменных
+ @param [in] table_cmd Таблица имен для кодовых слов
 */
 int printFullBlock (Node_t* node,
-                    FILE* stream)
+                    FILE* stream,
+                    NameTable_t* table_var,
+                    NameTable_t* table_cmd)
 {
     assert (node);
     assert (stream);
+    assert (table_var);
+    assert (table_cmd);
 
     char shape[20] = "";
     char type[20] = "";
+    char color[10] = "";
+    char label[40] = "";
 
     if (node->type == _TYPE_OPER)
     {
         strcpy (shape, "circle");
         strcpy (type, BIN_TREE_NAME_TYPES_NODE[_TYPE_OPER]);
+        strcpy (color, "#bd0fbaff");
+        sprintf (label, "\'%s\'(%d)", nameTableGetName (table_cmd, node->value.ival), node->value.ival);
     }
     else if (node->type == _TYPE_VAR)
     {
         strcpy (shape, "diamond");
         strcpy (type, BIN_TREE_NAME_TYPES_NODE[_TYPE_VAR]);
+        strcpy (color, "#1bc32cff");
+        sprintf (label, "\'%s\'(%d)", nameTableGetName (table_var, node->value.ival), node->value.ival);
     }
     else
     {
         strcpy (shape, "box");
         strcpy (type, BIN_TREE_NAME_TYPES_NODE[_TYPE_NUM]);
+        strcpy (color, "#0f32e0ff");
+        sprintf (label, "%lg", node->value.dval);
     }
 
     fprintf (stream, "block_%p [shape=%s, label=<\n<TABLE CELLSPACING=\"0\" CELLPADDING=\"4\">\n"
@@ -165,10 +185,8 @@ int printFullBlock (Node_t* node,
 
     fprintf (stream, "</TD></TR>\n"
              "<TR><TD BGCOLOR=\"#f46b8bff\" COLSPAN=\"2\">type=%s</TD></TR>\n"
-             "<TR><TD BGCOLOR=\"#f46b8bff\" COLSPAN=\"2\">value=", type);
+             "<TR><TD BGCOLOR=\"#f46b8bff\" COLSPAN=\"2\">value=%s", type, label);
 
-    if (node->type == _TYPE_NUM)    { fprintf (stream, "%lg", node->value.dval); }
-    else                            { fprintf (stream, "%d", node->value.ival); }
 
     fprintf (stream, "</TD></TR>\n"
              "<TR>\n<TD PORT=\"left\" BGCOLOR=\"#ff7301ff\">");
@@ -183,6 +201,59 @@ int printFullBlock (Node_t* node,
     return 0;
 }
 // -------------------------------------------------------------------------------------------------------
+#else // DEBUG_NODE
+// ------------------------------------------------------------------------------------------------------
+/**
+ @brief Функция описания блока дерева для кратного дампа
+ @param [in] node Узел, блок которого описывается
+ @param [in] stream Файл для вывода
+ @param [in] table_var Таблица имен для переменных
+ @param [in] table_cmd Таблица имен для кодовых слов
+*/
+int printFullBlock (Node_t* node,
+                    FILE* stream,
+                    NameTable_t* table_var,
+                    NameTable_t* table_cmd)
+{
+    assert (node);
+    assert (stream);
+    assert (table_var);
+    assert (table_cmd);
+
+    char shape[20] = "";
+    char type[20] = "";
+    char color[10] = "";
+    char label[40] = "";
+
+    if (node->type == _TYPE_OPER)
+    {
+        strcpy (shape, "circle");
+        strcpy (type, BIN_TREE_NAME_TYPES_NODE[_TYPE_OPER]);
+        strcpy (color, "#bd0fbaff");
+        sprintf (label, "\'%s\'(%d)", nameTableGetName (table_cmd, node->value.ival), node->value.ival);
+    }
+    else if (node->type == _TYPE_VAR)
+    {
+        strcpy (shape, "diamond");
+        strcpy (type, BIN_TREE_NAME_TYPES_NODE[_TYPE_VAR]);
+        strcpy (color, "#1bc32cff");
+        sprintf (label, "\'%s\'(%d)", nameTableGetName (table_var, node->value.ival), node->value.ival);
+    }
+    else
+    {
+        strcpy (shape, "box");
+        strcpy (type, BIN_TREE_NAME_TYPES_NODE[_TYPE_NUM]);
+        strcpy (color, "#0f32e0ff");
+        sprintf (label, "%lg", node->value.dval);
+    }
+
+    fprintf (stream, "block_%p [shape=%s, style=filled, "
+             "fillcolor=\"%s\", label=\"%s\"];\n",
+             node, shape, color, label);
+    return 0;
+}
+// -------------------------------------------------------------------------------------------------------
+#endif // DEBUG_MODE
 
 // -------------------------------------------------------------------------------------------------------
 /**
@@ -200,23 +271,24 @@ int printAddress (FILE* stream,
         fprintf (stream, "NIL");
         return 0;
     }
+    fprintf (stream, "%p", address);
 
-    const unsigned char* bytes = (const unsigned char*) &address;
-    size_t size = sizeof (address);
+    // const unsigned char* bytes = (const unsigned char*) &address;
+    // size_t size = sizeof (address);
 
-    for (size_t i = 0; i < size; i++)     { fprintf (stream, "%X", bytes[i]); }
+    // for (size_t i = 0; i < size; i++)     { fprintf (stream, "%X", bytes[i]); }
 
     return 0;
 }
 // -------------------------------------------------------------------------------------------------------
 
-
+#ifdef DEBUG_MODE
 // -------------------------------------------------------------------------------------------------------
 /**
- * @brief Рекурсивная функция создания связей между блоками
- * @param [in] node Указатель на текущий узел
- * @param [in] file Указатель на dot файл
- * @return 0
+ @brief Рекурсивная функция создания связей между блоками
+ @param [in] node Указатель на текущий узел
+ @param [in] file Указатель на dot файл
+ @return 0
 */
 int createLine (Node_t* node,
                 FILE* file)
@@ -239,7 +311,7 @@ int createLine (Node_t* node,
         if (node->right->parent == node)
         {
             fprintf (file,
-                     "block_%p:right -> block_%p:root [color=\"#0901faff\", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];\n",
+                     "block_%p:right -> block_%p:root [color=\"#fefefeff\", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];\n",
                      node, node->right);
         }
 
@@ -256,7 +328,7 @@ int createLine (Node_t* node,
         if (node->left->parent == node)
         {
             fprintf (file,
-                     "block_%p:left -> block_%p:root [color=\"#0901faff\", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];\n",
+                     "block_%p:left -> block_%p:root [color=\"#ffffffff\", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];\n",
                      node, node->left);
         }
 
@@ -267,6 +339,216 @@ int createLine (Node_t* node,
                      node, node->left);
         }
     }
+    return 0;
+}
+// -------------------------------------------------------------------------------------------------------
+#else // DEBUG_MODE
+// -------------------------------------------------------------------------------------------------------
+/**
+ @brief Рекурсивная функция создания связей между блоками
+ @param [in] node Указатель на текущий узел
+ @param [in] file Указатель на dot файл
+ @return 0
+*/
+int createLine (Node_t* node,
+                FILE* file)
+{
+    assert (node);
+    assert (file);
+
+    if (node->left)     { createLine (node->left, file); }
+    if (node->right)    { createLine (node->right, file); }
+
+    if (node->right)
+    {
+        if (node->right->parent == node)
+            fprintf (file,
+                     "block_%p -> block_%p [color=\"#fefefeff\", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];\n",
+                     node, node->right);
+
+        else
+            fprintf (file,
+                     "block_%p -> block_%p [color=\"#fa0101ff\", penwidth = 1.5, arrowsize = 0.6, constraint = true];\n",
+                     node, node->right);
+    }
+
+    if (node->left)
+    {
+        if (node->left->parent == node)
+            fprintf (file,
+                     "block_%p -> block_%p [color=\"#ffffffff\", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];\n",
+                     node, node->left);
+
+        else
+            fprintf (file,
+                     "block_%p -> block_%p [color=\"#fa0101ff\", penwidth = 1.5, arrowsize = 0.6, constraint = true];\n",
+                     node, node->left);
+    }
+    return 0;
+}
+// -------------------------------------------------------------------------------------------------------
+#endif // DEBUG_MODE
+
+
+
+// -------------------------------------------------------------------------------------------------------
+/**
+ @brief Функция дампа дерева в LaTex файл
+ @param [in] tree Указатель на структуру дерева
+*/
+int binTreeDumpLaTex (BinTree_t* tree)
+{
+    assert (tree);
+    dumpToLaTex (tree->null, tree->table_var);
+    return 0;
+}
+// -------------------------------------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------------------------------------
+/**
+ @brief Функция дампа
+ @param [in] node Указатель на корень поддерева
+ @param [in] table_var Таблица переменных
+*/
+int dumpToLaTex (Node_t* node,
+                 NameTable_t* table_var)
+{
+    assert (node);
+    assert (table_var);
+
+    FILE* stream = fopen (STANDARD_DUMP_LATEX_ADR, "a");
+    if (stream == NULL)
+        EXIT_FUNC("NULL file", 1);
+
+    fprintf (stream, "Производная\n");
+
+    fprintf (stream, "\\begin{equation}\n");
+    dumpNodeLaTex (node, stream, table_var);
+    fprintf (stream, "\n\\end{equation}\n");
+
+    fclose (stream);
+
+    return 0;
+}
+// -------------------------------------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------------------------------------
+/**
+ @brief Рекурсивная функция записи формулы по поддереву
+ @param [in] node Указатель на корень поддерева
+ @param [in] stream Файл для вывода
+ @param [in] table_var Таблица переменных
+*/
+int dumpNodeLaTex (Node_t* node,
+                   FILE* stream,
+                   NameTable_t* table_var)
+{
+    assert (node);
+    assert (stream);
+    assert (table_var);
+
+    if (node->type == _TYPE_OPER && node->value.ival == DIV_OPER)
+    {
+        fprintf (stream, " %s {", LATEX_COMAND[DIV_OPER]);
+        dumpNodeLaTex (node->left, stream, table_var);
+        fprintf (stream, "}{");
+        dumpNodeLaTex (node->right, stream, table_var);
+        fprintf (stream, "}");
+        return 0;
+    }
+
+    if (node->left)     { dumpNodeLaTex (node->left, stream, table_var); }
+
+    if (node->type == _TYPE_OPER)       { fprintf (stream, " %s ", LATEX_COMAND[node->value.ival]); }
+    else if (node->type == _TYPE_VAR)   { fprintf (stream, " %s ", nameTableGetName (table_var, node->value.ival)); }
+    else                                { fprintf (stream, " %lg ", node->value.dval); }
+
+    if (node->type == _TYPE_OPER && node->value.ival == POW_OPER)
+    {
+        fprintf (stream, "{");
+        dumpNodeLaTex (node->right, stream, table_var);
+        fprintf (stream, "}");
+        return 0;
+    }
+
+    if (node->right)    { dumpNodeLaTex (node->right, stream, table_var); }
+
+    // if (node->left)
+    //     dumpNodeLaTex (node->left, stream, table_var);
+
+    // if (node->type == _TYPE_OPER)
+    //     fprintf (stream, "%s", LATEX_COMAND[node->value.ival]);
+    //     // printf ("%s", LATEX_COMAND[node->value.ival]);
+
+    // else if (node->type == _TYPE_NUM)
+    // {
+    //     if (node->parent != NULL && node->parent->value.ival == DIV_OPER)
+    //         fprintf (stream, "{%lg}", node->value.dval);
+
+    //     else if (node->parent != NULL && node->parent->right == node && node->parent->value.ival == POW_OPER)
+    //         fprintf (stream, "{%lg}", node->value.dval);
+
+    //     else
+    //         fprintf (stream, " %lg ", node->value.dval);
+    // }
+    // else if (node->type == _TYPE_VAR)
+    // {
+    //     if (node->parent != NULL && node->parent->value.ival == DIV_OPER)
+    //         fprintf (stream, "{%s}", nameTableGetName (table_var, node->value.ival));
+
+    //     else if (node->parent != NULL && node->parent->right == node && node->parent->value.ival == POW_OPER)
+    //         fprintf (stream, "{%s}", nameTableGetName (table_var, node->value.ival));
+
+    //     else
+    //         fprintf (stream, " %s ", nameTableGetName (table_var, node->value.ival));
+    // }
+
+    // if (node->right)
+    //     dumpNodeLaTex (node->right, stream, table_var);
+
+    return 0;
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// -------------------------------------------------------------------------------------------------------
+/**
+ @brief Функция создания html файла и заполнения его заголовков
+*/
+int createHtml ()
+{
+    FILE* stream = fopen (STANDARD_DUMP_HTML_ADR, "w");
+    if (stream == NULL)
+        EXIT_FUNC("NULL file", 1);
+
+    fprintf (stream, "<pre style=\"font-family: 'Courier New', monospace;font-size: "
+             "14px; color: #e0e0e0; background-color: #1e1e1e; padding: 10px; border-radius: 6px;\">\n");
+    fclose(stream);
+
+    return 0;
+}
+// -------------------------------------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------------------------------------
+/**
+ @brief Функция создания LaTex файла и заполнение его заголовков
+*/
+int createLaTex ()
+{
+    FILE* stream = fopen (STANDARD_DUMP_LATEX_ADR, "w");
+    if (!stream)
+        EXIT_FUNC("NULL file", 1);
+
+    fprintf (stream,
+             "\\documentclass[a4paper,12pt]{article}\n\n"
+             "\\usepackage[utf8]{inputenc}\n"
+             "\\usepackage[russian]{babel}\n"
+             "\\usepackage{amsmath}\n"
+             "\\usepackage{amssymb}\n"
+             "\\usepackage{caption}\n"
+             "\\begin{document}\n");
+    fclose (stream);
+
     return 0;
 }
 // -------------------------------------------------------------------------------------------------------

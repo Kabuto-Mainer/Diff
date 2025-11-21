@@ -89,7 +89,15 @@ int compareName (NameType_t name_1,
     if (strcmp (name_1, name_2) == 0)
         return 0;
 
-    return 1;
+    int index = 0;
+    while (name_1[index] != ' ' && name_1[index] != '\0' && name_1[index] != '\n' &&
+           name_2[index] != ' ' && name_2[index] != '\0' && name_2[index] != '\n')
+    {
+        if (name_1[index] != name_2[index])
+            return 1;
+        index++;
+    }
+    return 0;
 }
 // ---------------------------------------------------------------------------------------------------
 
@@ -143,7 +151,7 @@ int nameTableAdd (NameTable_t* table,
     assert (table);
     ASSERT_NAME_TABLE_NAME (name);
 
-    if (table->capacity >= table->size)
+    if (table->size >= table->capacity)
     {
         NameTableVar_t* buffer = (NameTableVar_t*) realloc (table->data, table->capacity * 2);
         if (buffer == NULL)

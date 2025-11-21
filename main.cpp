@@ -8,11 +8,11 @@ int main ()
     BinTree_t tree = {};
     binTreeCtr (&tree);
     binTreeUpload (&tree);
-    dumpTree (&tree, "Test");
+    binTreeDumpHTML (&tree, "Test");
 
     BinTree_t new_tree = {};
     binTreeDiff (&tree, &new_tree);
-    dumpTree (&new_tree, "Test");
+    binTreeDumpHTML (&new_tree, "Test");
 
     binTreeSave (&new_tree);
 

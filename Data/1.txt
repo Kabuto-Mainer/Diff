@@ -1,1 +1,13 @@
-(+ (x nil nil) (6 nil nil))
+(+
+    (*
+        (sin
+            nil
+            (x nil nil)
+        )
+        (3 nil nil)
+    )
+    (pow
+        (x nil nil)
+        (4 nil nil)
+    )
+)
