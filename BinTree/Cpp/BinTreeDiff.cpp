@@ -76,10 +76,13 @@ Node_t* diffNode (Node_t* old_node,
 
     switch (old_node->value.ival)
     {
-        case (ADD_OPER): { return ADD_( dL, dR ); }
-        case (SUB_OPER): { return SUB_( dL, dR ); }
-        case (MUL_OPER): { return ADD_( MUL_( dL, cR ), MUL_( cL, dR ) ); }
-        case (DIV_OPER): { return DIV_( SUB_ ( MUL_ ( dL, cR ), MUL_ ( cL, dR ) ), MUL_ ( cR, cR )); }
+        case (ADD_OPER): { return ADD_(dL, dR); }
+        case (SUB_OPER): { return SUB_(dL, dR); }
+        case (MUL_OPER): { return ADD_( MUL_(dL, cR), MUL_(cL, dR) ); }
+        case (DIV_OPER): { return DIV_( SUB_( MUL_(dL, cR), MUL_(cL, dR) ), MUL_(cR, cR)); }
+        case (SIN_OPER): { return COMPLEX_ ( COS_ (cR) ); }
+        case (COS_OPER): { return COMPLEX_ ( MUL_ ( SIN_ (cR), NUM_NODE_(-1) ) ); }
+        case (TAN_OPER): { return COMPLEX_ ( DIV_ (NUM_NODE_(1), POW_( COS_ (cR), NUM_NODE_(2)) ) ); }
 
         default: { return NULL; }
     }
@@ -160,10 +163,10 @@ int getVarDiff (BinTree_t* tree)
  @param [in] oper Тип добавляемой операции
  @return Указатель на новой узел
 */
-Node_t* createOperNode (Node_t* left,
-                        Node_t* right,
-                        Node_t* parent,
-                        ALL_OPER oper)
+Node_t* createOperNodeBin (Node_t* left,
+                           Node_t* right,
+                           Node_t* parent,
+                           ALL_OPER oper)
 {
     assert (left);
     assert (right);
@@ -172,6 +175,33 @@ Node_t* createOperNode (Node_t* left,
     Node_t* new_node = newNode ();
     new_node->parent = parent;
     new_node->left = left;
+    new_node->right = right;
+    new_node->type = _TYPE_OPER;
+    new_node->value.ival = oper;
+
+    return new_node;
+}
+// --------------------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------------------
+/**
+ @brief Функция добавления узла с операцией
+ @param [in] right Правое поддерево нового узла
+ @param [in] parent Родитель нового узла
+ @param [in] oper Тип добавляемой операции
+ @return Указатель на новой узел
+ @note left = NULL
+*/
+Node_t* createOperNodeAtom (Node_t* right,
+                            Node_t* parent,
+                            ALL_OPER oper)
+{
+    assert (right);
+    assert (parent);
+
+    Node_t* new_node = newNode ();
+    new_node->parent = parent;
+    new_node->left = NULL;
     new_node->right = right;
     new_node->type = _TYPE_OPER;
     new_node->value.ival = oper;
@@ -223,6 +253,84 @@ Node_t* createNumNode (Node_t* parent,
     new_node->value.dval = value;
 
     return new_node;
+}
+// --------------------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------------------
+/**
+ @brief Функция взятия производной сложной функции
+ @param [in] new_oper Производная операции
+ @param [in] old_oper Первоначальная операция
+ @param [in] parent Указатель на родительский узел
+ @param [in] table_var Таблица имен
+ @param [in] name_var Имя переменной, по которой берется производная
+ @return Указатель на корень нового поддерева
+*/
+Node_t* createComplex (Node_t* new_oper,
+                       Node_t* old_oper,
+                       Node_t* parent,
+                       NameTable_t* table_var,
+                       const char* name_var)
+{
+    assert (new_oper);
+    assert (old_oper);
+    assert (parent);
+    assert (table_var);
+    assert (name_var);
+
+    if (old_oper->left != NULL && findVar (old_oper->left, table_var, name_var) != 0)
+    {
+        if (old_oper->right != NULL && findVar (old_oper->right, table_var, name_var) != 0)
+        {
+            Node_t* node = newNode ();
+            node->right = new_oper;
+            node->parent = parent;
+            node->type = _TYPE_OPER;
+            node->value.ival = MUL_OPER;
+
+            node->right = new_oper;
+            new_oper->parent = node;
+
+            node->left = newNode ();
+            node->left->parent = node;
+            node->left->type = _TYPE_OPER;
+            node->left->value.ival = MUL_OPER;
+            node->left->left = diffNode (old_oper->left, node->left, name_var, table_var);
+            node->left->right = diffNode (old_oper->right, node->left, name_var, table_var);
+            return node;
+        }
+        else
+        {
+            Node_t* node = newNode ();
+            node->type = _TYPE_OPER;
+            node->value.ival = MUL_OPER;
+            node->parent = parent;
+            node->left = diffNode (old_oper->left, node, name_var, table_var);
+            node->right = new_oper;
+            new_oper->parent = node;
+            return node;
+        }
+    }
+    else
+    {
+        if (old_oper->right != NULL && findVar (old_oper->right, table_var, name_var) != 0)
+        {
+            Node_t* node = newNode ();
+            node->type = _TYPE_OPER;
+            node->value.ival = MUL_OPER;
+            node->parent = parent;
+            node->left = diffNode (old_oper->right, node, name_var, table_var);
+            node->right = new_oper;
+            new_oper->parent = node;
+            return node;
+        }
+        else
+        {
+            return new_oper;
+        }
+    }
+
+    return NULL;
 }
 // --------------------------------------------------------------------------------------------------
 
