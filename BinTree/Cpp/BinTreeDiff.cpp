@@ -365,4 +365,112 @@ Node_t* createComplex (Node_t* new_oper,
 }
 // --------------------------------------------------------------------------------------------------
 
+// --------------------------------------------------------------------------------------------------
+Node_t* calculateNumConst (Node_t* node)
+{
+    assert (node);
+
+    if (node->type == _TYPE_VAR)
+        return NULL;
+
+    if (node->type = _TYPE_NUM)
+        return node;
+
+    if (node
+
+    Node_t* left = NULL;
+    Node_t* right = NULL;
+
+    if (node->left)
+        left = calculateNum (node->left);
+
+    if (node->right)
+        right = calculateNum (node->right);
+
+    if (right && left)
+    {
+        switch
+    }
+
+
+}
+
+// --------------------------------------------------------------------------------------------------
+Node_t* calculateNode (Node_t* node)
+{
+    assert (node);
+
+    if (node->type == _TYPE_NUM)
+        return node;
+
+    Node_t* l = NULL;
+    Node_t* r = NULL;
+
+    if (node->left)
+        l = calculateNode (node->left);
+
+    if (node->right)
+        r = calculateNode (node->right);
+
+    node->type = _TYPE_NUM;
+    switch (node->value.ival)
+    {
+        case ADD_OPER:   {node->value.dval = l->value.dval + r->value.dval; break;}
+        case SUB_OPER:   {node->value.dval = l->value.dval - r->value.dval; break;}
+        case MUL_OPER:   {node->value.dval = l->value.dval * r->value.dval; break;}
+        case DIV_OPER:   {
+            if (r->value.dval == 0) { EXIT_FUNC("Division by zero\n", NULL); }
+            node->value.dval = l->value.dval / r->value.dval;
+            break;
+                         }
+        case SIN_OPER:   {node->value.dval = sin (r->value.dval); break;}
+        case COS_OPER:   {node->value.dval = cos (r->value.dval); break;}
+        case TAN_OPER:   {
+            if ( cos (r->value.dval) == 0) { EXIT_FUNC("Cos = 0", NULL); }
+            node->value.dval = tan (r->value.dval);
+            break;
+                         }
+        case COT_OPER:   {
+            if ( sin (r->value.dval) == 0) { EXIT_FUNC("Sin = 0", NULL); }
+            node->value.dval = tan (r->value.dval);
+            break;
+                         }
+        case ASIN_OPER:  {
+            if ( r->value.dval < -1 || r->value.dval > 1) { EXIT_FUNC("|x| in Arcsin > 1", NULL); }
+            node->value.dval = asin (r->value.dval);
+            break;
+                         }
+        case ACOS_OPER:  {
+            if ( r->value.dval < -1 || r->value.dval > 1) { EXIT_FUNC("|x| in Arccos > 1", NULL); }
+            node->value.dval = acos (r->value.dval);
+            break;
+                         }
+        case ATAN_OPER:  {node->value.dval = atan (r->value.dval); break; }
+        case ACOT_OPER:  {
+            if ( r->value.dval == 0) { EXIT_FUNC("x = 0 in Arccot", NULL); }
+            node->value.dval = acot (r->value.dval);
+            break;
+                         }
+        case LOG_OPER:   {
+            if ( r->value.dval <= 0) { EXIT_FUNC("x <= 0 in Log", NULL); }
+            node->value.dval = log ()
+                          }
+        case LN_OPER:    {}
+        case POW_OPER:   {}
+        case EXP_OPER:   {}
+        case SH_OPER:    {}
+        case CH_OPER:    {}
+        case TH_OPER:    {}
+        case CTH_OPER:   {}
+        case ASH_OPER:   {}
+        case ACH_OPER:   {}
+        case ATH_OPER:   {}
+        case ACTH_OPER:  {}
+
+        default: {}
+    }
+
+
+
+}
 
