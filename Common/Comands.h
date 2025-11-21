@@ -3,6 +3,7 @@
 
 #include "../BinTree/Header/BinTreeType.h"
 #include "../NameTable/NameTableType.h"
+#include "../BinTree/Header/BinTreeCalcFunc.h"
 
 // ---------------------------------------------------------------------------------------------------
 /**
@@ -40,12 +41,16 @@ enum ALL_OPER
 // ---------------------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------------------
+/// @brief Тип функции вычисления констант
+typedef Node_t* (*calc_func)(Node_t*);
+// ---------------------------------------------------------------------------------------------------
 /// @brief Структура операций
 struct OperData_t
 {
     const char* name;
     size_t hash;
     ALL_OPER type;
+    calc_func func;
 };
 // ---------------------------------------------------------------------------------------------------
 
@@ -56,30 +61,30 @@ struct OperData_t
 */
 const OperData_t CODE_WORDS[] =
 {
-    { "+",     0,   ADD_OPER},
-    { "-",     0,   SUB_OPER},
-    { "*",     0,   MUL_OPER},
-    { "/",     0,   DIV_OPER},
-    { "sin",   0,   SIN_OPER},
-    { "cos",   0,   COS_OPER},
-    { "tan",   0,   TAN_OPER},
-    { "cot",   0,   COT_OPER},
-    { "asin",  0,   ASIN_OPER},
-    { "acos",  0,   ACOS_OPER},
-    { "atan",  0,   ATAN_OPER},
-    { "acot",  0,   ACOT_OPER},
-    { "log",   0,   LOG_OPER},
-    { "ln",    0,   LN_OPER},
-    { "pow",   0,   POW_OPER},
-    { "exp",   0,   EXP_OPER},
-    { "sh",    0,   SH_OPER},
-    { "ch",    0,   CH_OPER},
-    { "th",    0,   TH_OPER},
-    { "cth",   0,   CTH_OPER},
-    { "ash",   0,   ASH_OPER},
-    { "ach",   0,   ACH_OPER},
-    { "ath",   0,   ATH_OPER},
-    { "acth",  0,   ACTH_OPER}
+    { "+",     0,   ADD_OPER,   *calc_Math},
+    { "-",     0,   SUB_OPER,   *calc_Math},
+    { "*",     0,   MUL_OPER,   *calc_Math},
+    { "/",     0,   DIV_OPER,   *calc_Math},
+    { "sin",   0,   SIN_OPER,   *calc_Trig},
+    { "cos",   0,   COS_OPER,   *calc_Trig},
+    { "tan",   0,   TAN_OPER,   *calc_Trig},
+    { "cot",   0,   COT_OPER,   *calc_Trig},
+    { "asin",  0,   ASIN_OPER,  *calc_ATrig},
+    { "acos",  0,   ACOS_OPER,  *calc_ATrig},
+    { "atan",  0,   ATAN_OPER,  *calc_ATrig},
+    { "acot",  0,   ACOT_OPER,  *calc_ATrig},
+    { "log",   0,   LOG_OPER,   *calc_Degree},
+    { "ln",    0,   LN_OPER,    *calc_Degree},
+    { "pow",   0,   POW_OPER,   *calc_Degree},
+    { "exp",   0,   EXP_OPER,   *calc_Degree},
+    { "sh",    0,   SH_OPER,    *calc_Hype},
+    { "ch",    0,   CH_OPER,    *calc_Hype},
+    { "th",    0,   TH_OPER,    *calc_Hype},
+    { "cth",   0,   CTH_OPER,   *calc_Hype},
+    { "ash",   0,   ASH_OPER,   NULL},
+    { "ach",   0,   ACH_OPER,   NULL},
+    { "ath",   0,   ATH_OPER,   NULL},
+    { "acth",  0,   ACTH_OPER,  NULL}
 };
 // ---------------------------------------------------------------------------------------------------
 /// @brief Команда, начиная с которой начинается цикл поиска команды
