@@ -552,3 +552,25 @@ int createLaTex ()
     return 0;
 }
 // -------------------------------------------------------------------------------------------------------
+
+
+// -------------------------------------------------------------------------------------------------------
+/**
+ @brief Функция вывода всей информации о узле
+ @param [in] node Указатель на узел
+*/
+int dumpNode (Node_t* node)
+{
+    assert (node);
+
+    printf ("---------\nNODE [%p]\n", node);
+    printf ("ROOT [%p]\nLEFT [%p]\nRIGHT [%p]\n", node->parent, node->left, node->right);
+    printf ("TYPE [%d]\n", node->type);
+
+    if (node->type == _TYPE_NUM)    { printf ("VALUE [%lg]\n", node->value.dval); }
+    else                            { printf ("VALUE [%d]\n", node->value.ival); }
+    printf ("--------\n\n");
+
+    return 0;
+}
+// -------------------------------------------------------------------------------------------------------

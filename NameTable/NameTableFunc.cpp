@@ -63,8 +63,10 @@ int nameTableFind (NameTable_t* table,
     assert (table);
     ASSERT_NAME_TABLE_NAME(name);
 
+    printf ("NAME_TABLE: %s\n", name);
     for (size_t i = 0; i < table->size; i++)
     {
+        printf ("F: %s\n", table->data[i].name);
         if (compareName (name, table->data[i].name) == 0)
             return (int) i;
     }
@@ -86,8 +88,8 @@ int compareName (NameType_t name_1,
     ASSERT_NAME_TABLE_NAME(name_1);
     ASSERT_NAME_TABLE_NAME(name_2);
 
-    if (strcmp (name_1, name_2) == 0)
-        return 0;
+    // if (strcmp (name_1, name_2) == 0)
+    //     return 0;
 
     int index = 0;
     while (name_1[index] != ' ' && name_1[index] != '\0' && name_1[index] != '\n' &&

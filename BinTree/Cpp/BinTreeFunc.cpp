@@ -301,7 +301,6 @@ Node_t* uploadNode (Node_t* parent,
             }
             default:
             {
-                // printf ("SIZE: %zu\n", table_cmd->capacity);
                 int index = 0;
                 if (isdigit (**cur_pose))
                 {

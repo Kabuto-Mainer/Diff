@@ -371,7 +371,7 @@ Node_t* createComplex (Node_t* new_oper,
  @brief Рекурсивная функция сокращения констант
  @param [in] node Указатель на корень поддерева
  @param [in] size Указатель на размер дерева
- @return node
+ @return node, если это константа, иначе NULL
 */
 Node_t* calculateNum (Node_t* node,
                       size_t* size)
@@ -391,10 +391,10 @@ Node_t* calculateNum (Node_t* node,
     Node_t* right = NULL;
 
     if (node->left)
-        left = calculateNum (node->left);
+        left = calculateNum (node->left, size);
 
     if (node->right)
-        right = calculateNum (node->right);
+        right = calculateNum (node->right, size);
 
     if (right && left)
     {
@@ -407,7 +407,138 @@ Node_t* calculateNum (Node_t* node,
 // --------------------------------------------------------------------------------------------------
 
 // --------------------------------------------------------------------------------------------------
-Node_t*
+/**
+ @brief Рекурсивная функция сокращения ненужных операций
+ @param [in] node Указатель на корень поддерева
+ @param [in] size Указатель на размер дерева
+*/
+int abridgeNum (Node_t* node,
+                size_t* size)
+{
+    assert (node);
+    assert (size);
+
+    if (node->type != _TYPE_OPER || node->left == NULL)
+        return 0;
+
+    // dumpNode (node);
+    if (node->left->type == _TYPE_OPER)
+        abridgeNum (node->left, size);
+
+    if (node->right->type == _TYPE_OPER)
+        abridgeNum (node->right, size);
+
+    if (node->left->type == _TYPE_NUM && fabs (node->left->value.dval) < EPS)
+    {
+        if (node->value.ival == ADD_OPER)
+        {
+            replaceNearNode (node->right, node);
+            free (node->left);
+            free (node);
+            *size -= 2;
+        }
+        else if (node->value.ival == MUL_OPER || node->value.ival == DIV_OPER)
+        {
+            replaceNearNode (node->left, node);
+            deleteNode (node->right);
+            free (node);
+            *size -= 2;
+        }
+    }
+    else if (node->right->type == _TYPE_NUM && fabs (node->right->value.dval) < EPS)
+    {
+        if (node->value.ival == ADD_OPER || node->value.ival == SUB_OPER)
+        {
+            replaceNearNode (node->left, node);
+            free (node->right);
+            free (node);
+            *size -= 2;
+        }
+        else if (node->value.ival == MUL_OPER)
+        {
+            replaceNearNode (node->right, node);
+            deleteNode (node->left);
+            free (node);
+            *size -= 2;
+        }
+        else if (node->value.ival == POW_OPER)
+        {
+            replaceNearNode (node->right, node);
+            node->right->value.dval = 1.0;
+            deleteNode (node->left);
+            free (node);
+            *size -= 2;
+        }
+    }
+    else if (node->left->type == _TYPE_NUM && fabs (node->left->value.dval - 1.0) < EPS)
+    {
+        if (node->value.ival == MUL_OPER)
+        {
+            replaceNearNode (node->right, node);
+            free (node->left);
+            free (node);
+            *size -= 2;
+        }
+        else if (node->value.ival == POW_OPER)
+        {
+            replaceNearNode (node->left, node);
+            free (node->right);
+            free (node);
+            *size -= 2;
+        }
+    }
+    else if (node->right->type == _TYPE_NUM && fabs (node->right->value.dval - 1.0) < EPS)
+    {
+        if (node->value.ival == MUL_OPER || node->value.ival == DIV_OPER)
+        {
+            replaceNearNode (node->right, node);
+            free (node->left);
+            free (node);
+            *size -= 2;
+        }
+        else if (node->value.ival == POW_OPER)
+        {
+            replaceNearNode (node->left, node);
+            free (node->right);
+            free (node);
+            *size -= 2;
+        }
+    }
+    return 0;
+}
+// --------------------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------------------
+/**
+ @brief Функция налаживания родительских связей таким образом, что second заменяется на first
+ @param [in] first Узел, на который заменяют
+ @param [in] second Узел, который заменяют
+*/
+int replaceNearNode (Node_t* first,
+                     Node_t* second)
+{
+    assert (first);
+    assert (second);
+
+    // printf ("FIRST BEFORE\n");
+    // dumpNode (first);
+    // printf ("SECOND BEFORE\n");
+    // dumpNode (second);
+    first->parent = second->parent;
+    if (second->parent != NULL)
+    {
+        if (second->parent->left == second)     { second->parent->left = first; }
+        else                                    { second->parent->right = first; }
+    }
+    // printf ("PARENT\n");
+    // dumpNode (first->parent);
+    // printf ("FIRST AFTER\n");
+    // dumpNode (first);
+    // printf ("SECOND AFTER\n");
+    // dumpNode (second);
+    return 0;
+}
+// --------------------------------------------------------------------------------------------------
 
 
 
