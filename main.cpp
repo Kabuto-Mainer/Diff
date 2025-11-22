@@ -15,7 +15,7 @@ int main ()
     binTreeDumpHTML (&new_tree, "Test");
     calculateNum (new_tree.null, &(new_tree.size));
     binTreeDumpHTML (&new_tree, "Test");
-    abridgeNum (new_tree.null, &(new_tree.size));
+    new_tree.null =  abridgeNum (new_tree.null, &(new_tree.size));
     binTreeDumpHTML (&new_tree, "Test");
 
     binTreeSave (&new_tree);

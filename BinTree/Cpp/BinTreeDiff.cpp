@@ -33,8 +33,11 @@ int binTreeDiff (BinTree_t* old_tree,
     if (old_tree->diff_var == NULL) { getVarDiff (old_tree); }
 
     Node_t* new_null = diffNode (old_tree->null, new_tree->null, old_tree->diff_var, old_tree->table_var);
+    // printf ("OLD: %p\nNEW: %p\n", new_tree->null, new_null);
     free (new_tree->null);
     new_tree->null = new_null;
+    new_tree->null->parent = NULL;
+    // (void) new_null;
     new_tree->table_cmd = old_tree->table_cmd;
     new_tree->table_var = old_tree->table_var;
     new_tree->diff_var = old_tree->diff_var;
@@ -63,6 +66,7 @@ Node_t* diffNode (Node_t* old_node,
     assert (name_var);
     assert (new_parent);
 
+    LATEX (old_node, table_var, "До взятия производной\n");
     Node_t* node = NULL;
     if (old_node->type == _TYPE_NUM)
     {
@@ -114,7 +118,7 @@ Node_t* diffNode (Node_t* old_node,
 
     node->left->parent = node;
     node->right->parent = node;
-    dumpToLaTex (node, table_var);
+    LATEX (node, table_var, "После взятия производной\n");
     return node;
 }
 // --------------------------------------------------------------------------------------------------
@@ -411,9 +415,10 @@ Node_t* calculateNum (Node_t* node,
  @brief Рекурсивная функция сокращения ненужных операций
  @param [in] node Указатель на корень поддерева
  @param [in] size Указатель на размер дерева
+ @return Указатель на оптимизированное поддерево
 */
-int abridgeNum (Node_t* node,
-                size_t* size)
+Node_t* abridgeNum (Node_t* node,
+                    size_t* size)
 {
     assert (node);
     assert (size);
@@ -421,7 +426,7 @@ int abridgeNum (Node_t* node,
     if (node->type != _TYPE_OPER || node->left == NULL)
         return 0;
 
-    // dumpNode (node);
+    Node_t* ret_node = node;
     if (node->left->type == _TYPE_OPER)
         abridgeNum (node->left, size);
 
@@ -430,8 +435,12 @@ int abridgeNum (Node_t* node,
 
     if (node->left->type == _TYPE_NUM && fabs (node->left->value.dval) < EPS)
     {
+        // printf ("L-0");
+        // printf ("   NODE: %p\n", node);
+
         if (node->value.ival == ADD_OPER)
         {
+            ret_node = node->right;
             replaceNearNode (node->right, node);
             free (node->left);
             free (node);
@@ -439,6 +448,7 @@ int abridgeNum (Node_t* node,
         }
         else if (node->value.ival == MUL_OPER || node->value.ival == DIV_OPER)
         {
+            ret_node = node->left;
             replaceNearNode (node->left, node);
             deleteNode (node->right);
             free (node);
@@ -447,8 +457,12 @@ int abridgeNum (Node_t* node,
     }
     else if (node->right->type == _TYPE_NUM && fabs (node->right->value.dval) < EPS)
     {
+        // printf ("R-0");
+        // printf ("   NODE: %p\n", node);
+
         if (node->value.ival == ADD_OPER || node->value.ival == SUB_OPER)
         {
+            ret_node = node->left;
             replaceNearNode (node->left, node);
             free (node->right);
             free (node);
@@ -456,6 +470,7 @@ int abridgeNum (Node_t* node,
         }
         else if (node->value.ival == MUL_OPER)
         {
+            ret_node = node->right;
             replaceNearNode (node->right, node);
             deleteNode (node->left);
             free (node);
@@ -463,6 +478,7 @@ int abridgeNum (Node_t* node,
         }
         else if (node->value.ival == POW_OPER)
         {
+            ret_node = node->right;
             replaceNearNode (node->right, node);
             node->right->value.dval = 1.0;
             deleteNode (node->left);
@@ -472,8 +488,11 @@ int abridgeNum (Node_t* node,
     }
     else if (node->left->type == _TYPE_NUM && fabs (node->left->value.dval - 1.0) < EPS)
     {
+        // printf ("L-1");
+        // printf ("   NODE: %p\n", node);
         if (node->value.ival == MUL_OPER)
         {
+            ret_node = node->right;
             replaceNearNode (node->right, node);
             free (node->left);
             free (node);
@@ -481,6 +500,7 @@ int abridgeNum (Node_t* node,
         }
         else if (node->value.ival == POW_OPER)
         {
+            ret_node = node->left;
             replaceNearNode (node->left, node);
             free (node->right);
             free (node);
@@ -489,8 +509,12 @@ int abridgeNum (Node_t* node,
     }
     else if (node->right->type == _TYPE_NUM && fabs (node->right->value.dval - 1.0) < EPS)
     {
+        // printf ("R-1");
+        // printf ("   NODE: %p\n", node);
+
         if (node->value.ival == MUL_OPER || node->value.ival == DIV_OPER)
         {
+            ret_node = node->right;
             replaceNearNode (node->right, node);
             free (node->left);
             free (node);
@@ -498,13 +522,14 @@ int abridgeNum (Node_t* node,
         }
         else if (node->value.ival == POW_OPER)
         {
+            ret_node = node->left;
             replaceNearNode (node->left, node);
             free (node->right);
             free (node);
             *size -= 2;
         }
     }
-    return 0;
+    return ret_node;
 }
 // --------------------------------------------------------------------------------------------------
 

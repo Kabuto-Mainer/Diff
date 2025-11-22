@@ -121,6 +121,7 @@ int createBlock (Node_t* node,
     assert (node);
     assert (stream);
 
+    // dumpNode (node);
     if (node->left)     { createBlock (node->left, stream, table_var, table_cmd); }
     if (node->right)    { createBlock (node->right, stream, table_var, table_cmd); }
     printFullBlock (node, stream, table_var, table_cmd);
@@ -155,14 +156,14 @@ int printFullBlock (Node_t* node,
 
     if (node->type == _TYPE_OPER)
     {
-        strcpy (shape, "circle");
+        strcpy (shape, "box");
         strcpy (type, BIN_TREE_NAME_TYPES_NODE[_TYPE_OPER]);
         strcpy (color, "#bd0fbaff");
         sprintf (label, "\'%s\'(%d)", nameTableGetName (table_cmd, node->value.ival), node->value.ival);
     }
     else if (node->type == _TYPE_VAR)
     {
-        strcpy (shape, "diamond");
+        strcpy (shape, "box");
         strcpy (type, BIN_TREE_NAME_TYPES_NODE[_TYPE_VAR]);
         strcpy (color, "#1bc32cff");
         sprintf (label, "\'%s\'(%d)", nameTableGetName (table_var, node->value.ival), node->value.ival);
@@ -399,7 +400,7 @@ int createLine (Node_t* node,
 int binTreeDumpLaTex (BinTree_t* tree)
 {
     assert (tree);
-    dumpToLaTex (tree->null, tree->table_var);
+    LATEX (tree->null, tree->table_var);
     return 0;
 }
 // -------------------------------------------------------------------------------------------------------
@@ -409,9 +410,12 @@ int binTreeDumpLaTex (BinTree_t* tree)
  @brief Функция дампа
  @param [in] node Указатель на корень поддерева
  @param [in] table_var Таблица переменных
+ @param [in] reason Причина дампа
+ @see LATEX
 */
 int dumpToLaTex (Node_t* node,
-                 NameTable_t* table_var)
+                 NameTable_t* table_var,
+                 const char* reason)
 {
     assert (node);
     assert (table_var);
@@ -420,7 +424,8 @@ int dumpToLaTex (Node_t* node,
     if (stream == NULL)
         EXIT_FUNC("NULL file", 1);
 
-    fprintf (stream, "Производная\n");
+    if (reason != NULL)
+        fprintf (stream, "%s\n", reason);
 
     fprintf (stream, "\\begin{equation}\n");
     dumpNodeLaTex (node, stream, table_var);

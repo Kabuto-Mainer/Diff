@@ -227,7 +227,7 @@ int binTreeUpload (BinTree_t* tree)
     free (buffer_to_free);
     // Нулевой элемент необходим в дереве для его существования, но в загружено дереве он мешает
 
-    dumpToLaTex (tree->null, tree->table_var);
+    LATEX (tree->null, tree->table_var);
     return 0;
 }
 // ---------------------------------------------------------------------------------------------------

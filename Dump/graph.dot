@@ -6,18 +6,69 @@ digraph {
   node [shape=plaintext, style=filled, fontname="Helvetica"];
   edge [arrowhead=vee, arrowsize=0.6, penwidth=1.2];
 
-block_0x504000000690 [shape=box, style=filled, fillcolor="#0f32e0ff", label="4"];
-block_0x504000000610 [shape=diamond, style=filled, fillcolor="#1bc32cff", label="'x'(0)"];
-block_0x5040000005d0 [shape=box, style=filled, fillcolor="#0f32e0ff", label="3"];
-block_0x504000000650 [shape=circle, style=filled, fillcolor="#bd0fbaff", label="'pow'(14)"];
-block_0x5040000006d0 [shape=circle, style=filled, fillcolor="#bd0fbaff", label="'*'(2)"];
-block_0x5040000004d0 [shape=box, style=filled, fillcolor="#0f32e0ff", label="3"];
-block_0x504000000790 [shape=circle, style=filled, fillcolor="#bd0fbaff", label="'+'(0)"];
-block_0x504000000650 -> block_0x5040000005d0 [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
-block_0x504000000650 -> block_0x504000000610 [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
-block_0x5040000006d0 -> block_0x504000000650 [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
-block_0x5040000006d0 -> block_0x504000000690 [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
-block_0x504000000790 -> block_0x5040000004d0 [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
-block_0x504000000790 -> block_0x5040000006d0 [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000750 [shape=box, label=<
+<TABLE CELLSPACING="0" CELLPADDING="4">
+<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x504000000750</B></TD></TR>
+<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=0x504000000790</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Number</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value=4</TD></TR>
+<TR>
+<TD PORT="left" BGCOLOR="#ff7301ff">NIL</TD>
+<TD PORT="right" BGCOLOR="#08ff3aff">NIL</TD>
+</TR>
+</TABLE> >];
+
+block_0x504000000550 [shape=box, label=<
+<TABLE CELLSPACING="0" CELLPADDING="4">
+<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x504000000550</B></TD></TR>
+<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=0x504000000590</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Number</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value=3</TD></TR>
+<TR>
+<TD PORT="left" BGCOLOR="#ff7301ff">NIL</TD>
+<TD PORT="right" BGCOLOR="#08ff3aff">NIL</TD>
+</TR>
+</TABLE> >];
+
+block_0x504000000410 [shape=box, label=<
+<TABLE CELLSPACING="0" CELLPADDING="4">
+<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x504000000410</B></TD></TR>
+<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=0x504000000590</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Number</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value=2</TD></TR>
+<TR>
+<TD PORT="left" BGCOLOR="#ff7301ff">NIL</TD>
+<TD PORT="right" BGCOLOR="#08ff3aff">NIL</TD>
+</TR>
+</TABLE> >];
+
+block_0x504000000590 [shape=box, label=<
+<TABLE CELLSPACING="0" CELLPADDING="4">
+<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x504000000590</B></TD></TR>
+<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=0x504000000790</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Operation</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value='*'(2)</TD></TR>
+<TR>
+<TD PORT="left" BGCOLOR="#ff7301ff">0x504000000550</TD>
+<TD PORT="right" BGCOLOR="#08ff3aff">0x504000000410</TD>
+</TR>
+</TABLE> >];
+
+block_0x504000000790 [shape=box, label=<
+<TABLE CELLSPACING="0" CELLPADDING="4">
+<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x504000000790</B></TD></TR>
+<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=NIL</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Operation</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value='*'(2)</TD></TR>
+<TR>
+<TD PORT="left" BGCOLOR="#ff7301ff">0x504000000750</TD>
+<TD PORT="right" BGCOLOR="#08ff3aff">0x504000000590</TD>
+</TR>
+</TABLE> >];
+
+block_0x504000000590:right -> block_0x504000000410:root [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000590:left -> block_0x504000000550:root [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000790:right -> block_0x504000000590:root [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x504000000790:left -> block_0x504000000750:root [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
 
 }
