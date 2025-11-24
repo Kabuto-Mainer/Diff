@@ -396,11 +396,14 @@ int createLine (Node_t* node,
 /**
  @brief Функция дампа дерева в LaTex файл
  @param [in] tree Указатель на структуру дерева
+ @param [in] reason Причина вызова дампа
 */
-int binTreeDumpLaTex (BinTree_t* tree)
+int binTreeDumpLaTex (BinTree_t* tree,
+                      const char* reason)
 {
     assert (tree);
-    LATEX (tree->null, tree->table_var);
+    // reason == NULL - не ошибка
+    LATEX (tree->null, tree->table_var, reason);
     return 0;
 }
 // -------------------------------------------------------------------------------------------------------

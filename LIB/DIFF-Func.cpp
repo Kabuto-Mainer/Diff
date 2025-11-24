@@ -83,6 +83,7 @@ int DIFF_BringDiff (DIFF_Tree_t* tree)
 
     DIFF_Inf ("Starting bring diff");
     binTreeDumpHTML (*tree, "Before geting diff");
+    TREE_LATEX (*tree, "Перед взятием производной");
     BinTree_t* new_tree = (BinTree_t*) calloc (1, sizeof (BinTree_t));
     if (new_tree == NULL)
     {
@@ -90,12 +91,13 @@ int DIFF_BringDiff (DIFF_Tree_t* tree)
         return 1;
     }
 
-    DIFF_Inf ("Ending bring diff");
     binTreeDiff (*tree, new_tree);
     free (*tree);
     *tree = new_tree;
     binTreeSave (new_tree);
     binTreeDumpHTML (new_tree, "After geting diff");
+    TREE_LATEX (*tree, "После взятием производной");
+    DIFF_Inf ("Ending bring diff");
 
     return 0;
 }
