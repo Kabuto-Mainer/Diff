@@ -15,7 +15,6 @@ const char SYNTAX_VOID[] =
     ' ',
     '\n',
     '\r',
-    '\0',
     ',',
     '.'
 };

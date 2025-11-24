@@ -4,25 +4,28 @@
 // #define DEBUG_MODE
 
 // -------------------------------------------------------------------------------------------------------
+/// @brief Расположение директории с дампами дерева
+const char STANDARD_DUMP_DIR_ADR[] = "Dump/BinTree";
+
 /// @brief Расположение dot файла
-const char STANDARD_DUMP_DOT_ADR[] = "Dump/graph.dot";
+const char STANDARD_DUMP_DOT_ADR[] = "Dump/BinTree/graph.dot";
 
 /// @brief Расположение html файла
-const char STANDARD_DUMP_HTML_ADR[] = "Dump/dump.html";
+const char STANDARD_DUMP_HTML_ADR[] = "Dump/BinTree/dump.html";
 
 /// @brief Расположение директории с изображениями
-const char STANDARD_DUMP_IMAGE_ADR[] = "Dump/Image/";
+const char STANDARD_DUMP_IMAGE_ADR[] = "Dump/BinTree/Image/";
 
 /// @brief Расположение tex файла
-const char STANDARD_DUMP_LATEX_ADR[] = "Dump/dump.tex";
+const char STANDARD_DUMP_LATEX_ADR[] = "Dump/BinTree/dump.tex";
 // -------------------------------------------------------------------------------------------------------
 
 // -------------------------------------------------------------------------------------------------------
 /// @brief Расположение стандартного файла для сохранения данных
-const char STANDARD_SAVE_ADR[] = "Data/1.txt";
+const char STANDARD_SAVE_ADR[] = "Data/prog.txt";
 
 ///  @brief Расположение стандартного файла для загрузки данных
-const char STANDARD_UPLOAD_ADR[] = "Data/1.txt";
+const char STANDARD_UPLOAD_ADR[] = "Data/prog.txt";
 // -------------------------------------------------------------------------------------------------------
 
 

@@ -1,0 +1,10 @@
+(+
+    (*
+        (x nil nil)
+        (5 nil nil)
+    )
+    (sin
+        nil
+        (x nil nil)
+    )
+)

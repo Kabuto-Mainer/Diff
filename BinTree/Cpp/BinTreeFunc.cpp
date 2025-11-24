@@ -61,8 +61,8 @@ int binTreeCtr (BinTree_t* tree)
     tree->table_cmd->size = sizeof (CODE_WORDS) / sizeof (CODE_WORDS[0]);
     tree->table_cmd->capacity = tree->table_cmd->size;
 
-    createHtml ();
-    createLaTex ();
+    cleanHtml ();
+    cleanLaTex ();
 
     return 0;
 }
@@ -204,17 +204,22 @@ int saveNode (FILE* stream,
 /**
  @brief Функция загрузки дерева из файла
  @param [in] tree Указатель на структуру дерева
+ @param [in] file Имя файла, из которого произойдет загрузка
 */
-int binTreeUpload (BinTree_t* tree)
+int binTreeUpload (BinTree_t* tree,
+                   const char* file)
 {
     assert (tree);
+    assert (file);
 
-    size_t size_buffer = getFileSize (STANDARD_UPLOAD_ADR);
+    size_t size_buffer = getFileSize (file);
     char* buffer = (char*) calloc (size_buffer + 1, sizeof (char));
+    if (buffer == NULL)
+        EXIT_FUNC("NULL calloc", 1);
 
-    FILE* stream = fopen (STANDARD_UPLOAD_ADR, "rb");
+    FILE* stream = fopen (file, "rb");
     size_t trash = fread (buffer, sizeof (char), size_buffer, stream);
-    (void) trash;
+    buffer[trash] = '\0';
     fclose (stream);
 
     binTreeDtr (tree);
@@ -222,8 +227,11 @@ int binTreeUpload (BinTree_t* tree)
 
     char* buffer_to_free = buffer;
     tree->null = uploadNode (tree->null, &buffer, tree->table_var, tree->table_cmd);
-    free (tree->null->parent);
-    tree->null->parent = NULL;
+    if (tree->null != NULL)
+    {
+        free (tree->null->parent);
+        tree->null->parent = NULL;
+    }
     free (buffer_to_free);
     // Нулевой элемент необходим в дереве для его существования, но в загружено дереве он мешает
 
@@ -396,6 +404,10 @@ int skipVoid (char** cur_pose)
                 (*cur_pose)++;
                 flag = 1;
                 break;
+            }
+            if (**cur_pose == '\0')
+            {
+                return 0;
             }
         }
 

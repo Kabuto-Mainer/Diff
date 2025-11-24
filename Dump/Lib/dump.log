@@ -1,0 +1,55 @@
+Log file of program diff
+
+INF: Initialization of DIFF_Lib
+[LIB/DIFF-Func.cpp:25]
+Time start = 0
+Time call = 22743
+Time work = 22740
+
+INF: Creating DIFF_Tree_t
+[LIB/DIFF-Func.cpp:38]
+Time start = 0
+Time call = 22840
+Time work = 22838
+
+INF: Successfully creating
+[LIB/DIFF-Func.cpp:46]
+Time start = 0
+Time call = 22935
+Time work = 22933
+
+INF: Start uploading tree
+[LIB/DIFF-Func.cpp:65]
+Time start = 0
+Time call = 24151
+Time work = 24149
+
+INF: Uploading tree successful
+[LIB/DIFF-Func.cpp:67]
+Time start = 0
+Time call = 25274
+Time work = 25271
+
+INF: Starting bring diff
+[LIB/DIFF-Func.cpp:84]
+Time start = 0
+Time call = 25883
+Time work = 25880
+
+INF: Ending bring diff
+[LIB/DIFF-Func.cpp:93]
+Time start = 0
+Time call = 26645
+Time work = 26642
+
+INF: Starting delete tree
+[LIB/DIFF-Func.cpp:113]
+Time start = 0
+Time call = 29100
+Time work = 29098
+
+INF: End delete tree
+[LIB/DIFF-Func.cpp:117]
+Time start = 0
+Time call = 29435
+Time work = 29433

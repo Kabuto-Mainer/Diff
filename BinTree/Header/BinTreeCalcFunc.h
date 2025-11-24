@@ -2,12 +2,14 @@
 #define BIN_TREE_CALC_H
 
 #include "../Header/BinTreeType.h"
+#include "../../Common/Common.h"
 
 // --------------------------------------------------------------------------------------------------
 /// @brief Функция обработки ошибки в математических операциях
 #define CALC_ERROR(reason, ret_val)     \
     do {                                \
         printf ("%s", reason);          \
+        DIFF_Error (reason);            \
         return ret_val;                 \
      } while (0)
 // --------------------------------------------------------------------------------------------------

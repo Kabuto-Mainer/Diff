@@ -5,21 +5,11 @@
 
 int main ()
 {
-    BinTree_t tree = {};
-    binTreeCtr (&tree);
-    binTreeUpload (&tree);
-    binTreeDumpHTML (&tree, "Test");
-
-    BinTree_t new_tree = {};
-    binTreeDiff (&tree, &new_tree);
-    binTreeDumpHTML (&new_tree, "Test");
-    calculateNum (new_tree.null, &(new_tree.size));
-    binTreeDumpHTML (&new_tree, "Test");
-    new_tree.null =  abridgeNum (new_tree.null, &(new_tree.size));
-    binTreeDumpHTML (&new_tree, "Test");
-
-    binTreeSave (&new_tree);
-    binTreeDtr (&new_tree);
+    DIFF_Init ();
+    DIFF_Tree_t tree = DIFF_TreeCtr ();
+    DIFF_GetTree (tree, "Data/Input.txt");
+    DIFF_BringDiff (&tree);
+    DIFF_TreeDtr (tree);
 
     return 0;
 }

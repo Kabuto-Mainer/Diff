@@ -2,8 +2,21 @@
 #include "assert.h"
 #include <sys/stat.h>
 #include <unistd.h>
+#include <time.h>
 
 #include "Common.h"
+
+// ---------------------------------------------------------------------------------------------------
+/// @brief Время начала работы библиотеки
+static clock_t TIME_START = 0;
+// ---------------------------------------------------------------------------------------------------
+
+
+// ---------------------------------------------------------------------------------------------------
+/// @brief Адрес log файла
+const char* ADDRESS_LOG_FILE = "Dump/Lib/dump.log";
+// ---------------------------------------------------------------------------------------------------
+
 
 // --------------------------------------------------------------------------------------------------
 /**
@@ -48,4 +61,58 @@ size_t getFileSize (const char* name_file)
     return (size_t) file_stat.st_size;
 }
 // -------------------------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------------------
+/**
+ @brief Функция отправки информации в лог файл
+ @param [in] text Текст сообщения
+ @param [in] file Файл откуда произошел вызов
+ @param [in] line Строка откуда произошел вызов
+*/
+int pushLogFile (const char* text,
+                 const char* file,
+                 int line)
+{
+    assert (text);
+
+    FILE* stream = fopen (ADDRESS_LOG_FILE, "a");
+    if (stream == NULL)
+    {
+        printf ("ERROR (%s:%d): Can not open log file\n", __FILE__, __LINE__);
+        return 1;
+    }
+
+    fprintf (stream, "%s\n", text);
+    fprintf (stream, "[%s:%d]\nTime start = %ld\nTime call = %ld\nTime work = %ld\n",
+            file, line, TIME_START, clock (), clock () - TIME_START);
+
+    fclose (stream);
+
+    return 0;
+}
+// ---------------------------------------------------------------------------------------------------
+
+
+// ---------------------------------------------------------------------------------------------------
+/**
+ @brief Функция очистки log файла
+*/
+int cleanLogFile ()
+{
+    FILE* stream = fopen (ADDRESS_LOG_FILE, "w");
+    if (stream == NULL)
+    {
+        DIFF_Error ("NULL file");
+        return 1;
+    }
+
+    fprintf (stream, "Log file of program diff\n");
+    fclose (stream);
+
+    return 0;
+}
+// ---------------------------------------------------------------------------------------------------
+
+
+
 
