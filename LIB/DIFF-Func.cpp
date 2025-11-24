@@ -9,6 +9,7 @@
 
 #include "../BinTree/Header/BinTreeFunc.h"
 #include "../BinTree/Header/BinTreeCalcFunc.h"
+#include "../BinTree/Header/BinTreeConfig.h"
 
 #include "config.h"
 #include "DIFF_Func.h"
@@ -117,6 +118,61 @@ int DIFF_TreeDtr (DIFF_Tree_t tree)
     free (tree);
 
     DIFF_Inf ("End delete tree");
+    return 0;
+}
+// ---------------------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------------------
+/**
+ @brief Функция оптимизации объекта
+ @param [in] tree Объект
+*/
+int DIFF_Optimization (DIFF_Tree_t tree)
+{
+    assert (tree);
+
+    DIFF_Inf ("Starting optimization tree");
+    binTreeDumpHTML (tree, "Before optimization tree");
+    TREE_LATEX (tree, "Перед оптимизацией");
+
+    size_t old_size = tree->size;
+    size_t new_size = tree->size;
+
+    do
+    {
+        old_size = new_size;
+        calculateNum (tree->null, &new_size);
+        abridgeNum (tree->null, &new_size);
+    }
+    while (new_size != old_size);
+    tree->size = new_size;
+
+    DIFF_Inf ("End optimization tree");
+    binTreeDumpHTML (tree, "After optimization tree");
+    TREE_LATEX (tree, "После оптимизацией");
+
+    return 0;
+}
+// ---------------------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------------------
+/**
+ @brief Функция завершения работы библиотеки
+*/
+int DIFF_Quit ()
+{
+    FILE* stream = fopen (STANDARD_DUMP_LATEX_ADR, "a");
+    if (stream == NULL)
+        EXIT_FUNC ("NULL file", 1);
+
+    fprintf (stream, "\n\\end{document}");
+    fclose (stream);
+
+    char cmd[200] = "";
+    sprintf (cmd, "pdflatex %s", STANDARD_DUMP_LATEX_ADR);
+    int trash = system (cmd);
+    (void) trash;
+
     return 0;
 }
 // ---------------------------------------------------------------------------------------------------
