@@ -11,7 +11,6 @@
 #include "../BinTree/Header/BinTreeCalcFunc.h"
 #include "../BinTree/Header/BinTreeConfig.h"
 
-#include "config.h"
 #include "DIFF_Func.h"
 #include "../Common/Common.h"
 
@@ -177,10 +176,35 @@ int DIFF_Quit ()
 }
 // ---------------------------------------------------------------------------------------------------
 
-// int DIFF_Calc (DIFF_Tree_t tree)
-// {
+// ---------------------------------------------------------------------------------------------------
+/**
+ @brief Функция вычисления объекта
+ @param [in] tree Объект
+*/
+int DIFF_Calc (DIFF_Tree_t tree)
+{
+    assert (tree);
 
-// }
+    DIFF_Inf ("Starting replacing variables");
+    binTreeDumpHTML (tree, "Before replace all variables");
+    TREE_LATEX (tree, "Перед заменой переменных");
+
+    replaceTreeVar (tree);
+
+    DIFF_Inf ("End replacing variables and start calculate tree");
+    binTreeDumpHTML (tree, "After replace all variables");
+    TREE_LATEX (tree, "После заменой переменных");
+
+    calculateNum (tree->null, &tree->size);
+
+    DIFF_Inf ("End calculate tree");
+    binTreeDumpHTML (tree, "After calculate tree");
+    TREE_LATEX (tree, "После вычисления дерева");
+
+    return 0;
+}
+// ---------------------------------------------------------------------------------------------------
+
 
 // int DIFF_MakeTeylor ()
 // {

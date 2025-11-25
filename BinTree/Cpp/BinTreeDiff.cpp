@@ -566,4 +566,74 @@ int replaceNearNode (Node_t* first,
 // --------------------------------------------------------------------------------------------------
 
 
+// --------------------------------------------------------------------------------------------------
+/**
+ @brief Функция замены переменных на их значения
+ @param [in] tree Указатель на бинарное дерево
+*/
+int replaceTreeVar (BinTree_t* tree)
+{
+    assert (tree);
+
+    getValueVar (tree->table_var);
+    replaceNodeVar (tree->null, tree->table_var);
+
+    return 0;
+}
+// --------------------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------------------
+/**
+ @brief Рекурсивная функция замены переменных в узлах поддерева
+ @param [in] node Указатель на корень поддерева
+ @param [in] table_var Таблица имен переменных
+*/
+int replaceNodeVar (Node_t* node,
+                    NameTable_t* table_var)
+{
+    assert (node);
+    assert (table_var);
+
+    if (node->left)     { replaceNodeVar (node->left, table_var); }
+    if (node->right)    { replaceNodeVar (node->right, table_var); }
+
+    if (node->type == _TYPE_VAR)
+    {
+        node->value.dval = table_var->data[node->value.ival].value;
+        node->type = _TYPE_NUM;
+    }
+
+    return 0;
+}
+// --------------------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------------------
+/**
+ @brief Функция получения значений переменных от пользователя
+ @param [in] table_var Таблица имен переменных
+*/
+int getValueVar (NameTable_t* table_var)
+{
+    assert (table_var);
+
+    for (size_t i = 0; i < table_var->size; i++)
+    {
+        printf ("\nЗначение %s:", table_var->data[i].name);
+
+        double value = 0;
+        while (true)
+        {
+            if (scanf ("%lf", &value) != 1)
+            {
+                printf ("\nПовторите ввод");
+                continue;
+            }
+        }
+        table_var->data[i].value = value;
+    }
+    return 0;
+}
+// --------------------------------------------------------------------------------------------------
+
+
 

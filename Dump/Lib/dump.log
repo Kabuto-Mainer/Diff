@@ -1,67 +1,67 @@
 Log file of program diff
 
-INF: Initialization of DIFF_Lib
-[LIB/DIFF-Func.cpp:26]
+Info: Initialization of DIFF_Lib
+[LIB/DIFF-Func.cpp:25]
 Time start = 0
-Time call = 14776
-Time work = 14775
+Time call = 14795
+Time work = 14793
 
-INF: Creating DIFF_Tree_t
-[LIB/DIFF-Func.cpp:39]
+Info: Creating DIFF_Tree_t
+[LIB/DIFF-Func.cpp:38]
 Time start = 0
-Time call = 14825
-Time work = 14824
+Time call = 14855
+Time work = 14854
 
-INF: Successfully creating
-[LIB/DIFF-Func.cpp:47]
+Info: Successfully creating
+[LIB/DIFF-Func.cpp:46]
 Time start = 0
-Time call = 14869
-Time work = 14868
+Time call = 14920
+Time work = 14919
 
-INF: Start uploading tree
-[LIB/DIFF-Func.cpp:66]
+Info: Start uploading tree
+[LIB/DIFF-Func.cpp:65]
 Time start = 0
-Time call = 15571
-Time work = 15570
+Time call = 15658
+Time work = 15657
 
-INF: Uploading tree successful
-[LIB/DIFF-Func.cpp:68]
+Info: Uploading tree successful
+[LIB/DIFF-Func.cpp:67]
 Time start = 0
-Time call = 16301
-Time work = 16300
+Time call = 16332
+Time work = 16330
 
-INF: Starting bring diff
-[LIB/DIFF-Func.cpp:85]
+Info: Starting bring diff
+[LIB/DIFF-Func.cpp:84]
 Time start = 0
-Time call = 16649
-Time work = 16648
+Time call = 16686
+Time work = 16684
 
-INF: Ending bring diff
-[LIB/DIFF-Func.cpp:101]
+Info: Ending bring diff
+[LIB/DIFF-Func.cpp:100]
 Time start = 0
-Time call = 18610
-Time work = 18609
+Time call = 18404
+Time work = 18403
 
-INF: Starting optimization tree
-[LIB/DIFF-Func.cpp:134]
+Info: Starting optimization tree
+[LIB/DIFF-Func.cpp:133]
 Time start = 0
-Time call = 18649
-Time work = 18647
+Time call = 18447
+Time work = 18446
 
-INF: End optimization tree
-[LIB/DIFF-Func.cpp:150]
+Info: End optimization tree
+[LIB/DIFF-Func.cpp:149]
 Time start = 0
-Time call = 19074
-Time work = 19073
+Time call = 18866
+Time work = 18865
 
-INF: Starting delete tree
-[LIB/DIFF-Func.cpp:116]
+Info: Starting delete tree
+[LIB/DIFF-Func.cpp:115]
 Time start = 0
-Time call = 19448
-Time work = 19446
+Time call = 19265
+Time work = 19264
 
-INF: End delete tree
-[LIB/DIFF-Func.cpp:120]
+Info: End delete tree
+[LIB/DIFF-Func.cpp:119]
 Time start = 0
-Time call = 19545
-Time work = 19544
+Time call = 19344
+Time work = 19343
