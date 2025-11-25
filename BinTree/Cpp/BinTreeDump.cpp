@@ -427,12 +427,12 @@ int dumpToLaTex (Node_t* node,
     if (stream == NULL)
         EXIT_FUNC("NULL file", 1);
 
-    fprintf (stream, "\\begin{align*}\n");
+    fprintf (stream, "\\begin{dmath}\n");
     if (reason != NULL)
-        fprintf (stream, "\\text{%s:}", reason);
+        fprintf (stream, "\\text{%s:} ", reason);
 
     dumpNodeLaTex (node, stream, table_var);
-    fprintf (stream, "\\\\\n\\end{align*}\n");
+    fprintf (stream, "\n\\end{dmath}\n");
 
     fclose (stream);
 
@@ -518,7 +518,8 @@ int cleanLaTex ()
              "\\usepackage[utf8]{inputenc}\n"
              "\\usepackage[russian]{babel}\n"
              "\\usepackage{amsmath}\n"
-             "\\usepackage{mathtools}\n"
+             "\\usepackage{breqn}\n"
+            //  "\\usepackage{mathtools}\n"
              "\\usepackage{amssymb}\n"
              "\\usepackage{caption}\n"
              "\\begin{document}\n");

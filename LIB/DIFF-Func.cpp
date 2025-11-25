@@ -83,7 +83,7 @@ int DIFF_BringDiff (DIFF_Tree_t* tree)
     assert (tree);
     assert (*tree);
 
-    DIFF_Inf ("Starting bring diff");
+    DIFF_Inf ("Start bring diff");
     binTreeDumpHTML (*tree, "Before geting diff");
     TREE_LATEX (*tree, "Перед взятием производной");
     BinTree_t* new_tree = (BinTree_t*) calloc (1, sizeof (BinTree_t));
@@ -99,7 +99,7 @@ int DIFF_BringDiff (DIFF_Tree_t* tree)
     binTreeSave (new_tree);
     binTreeDumpHTML (new_tree, "After geting diff");
     TREE_LATEX (*tree, "После взятием производной");
-    DIFF_Inf ("Ending bring diff");
+    DIFF_Inf ("End bring diff");
 
     return 0;
 }
@@ -114,7 +114,7 @@ int DIFF_TreeDtr (DIFF_Tree_t tree)
 {
     assert (tree);
 
-    DIFF_Inf ("Starting delete tree");
+    DIFF_Inf ("Start delete tree");
     binTreeDtr (tree);
     free (tree);
 
@@ -132,7 +132,7 @@ int DIFF_Optimization (DIFF_Tree_t tree)
 {
     assert (tree);
 
-    DIFF_Inf ("Starting optimization tree");
+    DIFF_Inf ("Start optimization tree");
     binTreeDumpHTML (tree, "Before optimization tree");
     TREE_LATEX (tree, "Перед оптимизацией");
 
@@ -187,7 +187,7 @@ int DIFF_Calc (DIFF_Tree_t tree)
 {
     assert (tree);
 
-    DIFF_Inf ("Starting replacing variables");
+    DIFF_Inf ("Start replacing variables");
     binTreeDumpHTML (tree, "Before replace all variables");
     TREE_LATEX (tree, "Перед заменой переменных");
 
@@ -208,104 +208,29 @@ int DIFF_Calc (DIFF_Tree_t tree)
 // ---------------------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------------------
-int DIFF_MakeTeylor (DIFF_Tree_t tree)
+/**
+ @brief Функция создания ряда Тейлора объекта
+ @param [in] tree Объект
+*/
+int DIFF_MakeTaylor (DIFF_Tree_t tree)
 {
     assert (tree);
 
-    int index_var = nameTableFind (tree->table_var, tree->diff_var);
-    tree->table_var->data[index_var].value = 0.0;
+    DIFF_Inf ("Start making Taylor row");
+    binTreeDumpHTML (tree, "Before making Taylor row");
+    TREE_LATEX (tree, "Перед созданием ряда Тейлора");
 
-    Node_t* old_node = tree->null;
-    Node_t* all_parent = newNode ();
-    Node_t* diff_node = NULL;
-    Node_t* result = newNode ();
-    result->type = _TYPE_NUM;
-    result->value.dval = 0.0;
+    makeTaylor (tree);
 
-    FILE* stream = fopen (STANDARD_DUMP_LATEX_ADR, "a");
-    if (stream == NULL)
-        EXIT_FUNC ("NULL file", 1);
-
-    double power_count = 0;
-    for (int i = 0; i < 4; i++)
-    {
-        if (i != 0)
-        {
-            diff_node = diffNode (old_node, all_parent, tree->diff_var, tree->table_var);
-            diff_node->parent = NULL;
-        }
-        else
-        {
-            diff_node = copyNode (tree->null, all_parent);
-            diff_node->parent = NULL;
-        }
-        deleteNode (old_node);
-
-        old_node = copyNode (diff_node, all_parent);
-        replaceNodeVar (diff_node, tree->table_var);
-
-        size_t old_size = (size_t) -1;
-        size_t new_size = (size_t) -1; // Что бы не было проблем с размерами
-        calculateNum (diff_node, &new_size);
-        diff_node->value.dval /= fact (power_count);
-
-        Node_t* power = newNode ();
-        power->type = _TYPE_NUM;
-        power->value.dval = power_count;
-        power_count++;
-
-        result = createOperNodeBin (result, createOperNodeBin (diff_node, createOperNodeBin
-                 (createVarNode (result, index_var), power, all_parent, POW_OPER), all_parent, MUL_OPER), all_parent, ADD_OPER);
-        result->parent = NULL;
-
-        do
-        {
-            old_size = new_size;
-            calculateNum (result, &new_size);
-            Node_t* buffer = abridgeNum (result, &new_size);
-            if (buffer != NULL) { result = buffer; }
-        } while (old_size != new_size);
-    }
-    free (all_parent);
-    deleteNode (old_node);
-
-    BinTree_t new_tree = {};
-    new_tree.null = result;
-    new_tree.table_var = tree->table_var;
-    new_tree.table_cmd = tree->table_cmd;
-    new_tree.diff_var = tree->diff_var;
-    new_tree.size = 4;
-
-    size_t old_size = (size_t) -1;
-    size_t new_size = (size_t) -1;
-
-    binTreeDumpHTML (&new_tree, "Test");
-    do
-    {
-        old_size = new_size;
-        calculateNum (result, &new_size);
-        result = abridgeNum (result, &new_size);
-    }
-    while (new_size != old_size);
-
-    // FILE* stream = fopen (STANDARD_DUMP_LATEX_ADR, "a");
-    // if (stream == NULL)
-    //     EXIT_FUNC ("NULL file", 1);
-
-    fprintf (stream, "\n\\begin{equation}\n");
-    fprintf (stream, "f(x)=");
-    dumpNodeLaTex (result, stream, tree->table_var);
-    fprintf (stream, "\n\\end{equation}\n");
-    fclose (stream);
-
-    tree->null = result;
-    tree->size = getSizeTree (result);
+    DIFF_Inf ("End making Taylor row");
+    binTreeDumpHTML (tree, "After making Taylor row");
+    TREE_LATEX (tree, "Сам ряд Тейлора");
 
     return 0;
 }
 // ---------------------------------------------------------------------------------------------------
 
-// Node_t* createMulTeylor (const int number)
+// Node_t* createMulTaylor (const int number)
 // {
 
 

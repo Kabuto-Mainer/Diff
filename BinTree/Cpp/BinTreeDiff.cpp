@@ -5,8 +5,11 @@
 
 #include "../../Common/AllTypes.h"
 #include "../../Common/Comands.h"
+
 #include "../Header/BinTreeType.h"
 #include "../Header/BinTreeDSL.h"
+#include "../Header/BinTreeConfig.h"
+
 #include "../../NameTable/NameTableFunc.h"
 
 // --------------------------------------------------------------------------------------------------
@@ -443,20 +446,6 @@ Node_t* abridgeNum (Node_t* node,
         return NULL;
     }
 
-    // if (!L && R)
-    // {
-    //     replaceNearNode(R, node);
-    //     deleteNode(node);
-    //     (*size)--;
-    //     return R;
-    // }
-    // if (L && !R) {
-    //     replaceNearNode(L, node);
-    //     deleteNode(node);
-    //     (*size)--;
-    //     return L;
-    // }
-
     int oper = node->value.ival;
     if (L->type == _TYPE_NUM && fabs (L->value.dval) < EPS)
     {
@@ -582,6 +571,37 @@ int replaceNearNode (Node_t* first, Node_t* second)
 
 // --------------------------------------------------------------------------------------------------
 /**
+ @brief Функция оптимизации поддерева
+ @param [in] node Указатель на поддерево
+ @param [in] size Указатель на размер поддерева
+*/
+int optimizeNode (Node_t* node,
+                  size_t* size)
+{
+    assert (node);
+    assert (size);
+
+    size_t old_size = *size;
+    size_t new_size = *size;
+
+    do
+    {
+        old_size = new_size;
+        calculateNum (node, size);
+        Node_t* buffer = abridgeNum (node, size);
+
+        if (buffer != NULL)
+            node = buffer;
+    }
+    while (old_size != new_size);
+
+    return 0;
+}
+// --------------------------------------------------------------------------------------------------
+
+
+// --------------------------------------------------------------------------------------------------
+/**
  @brief Функция замены переменных на их значения
  @param [in] tree Указатель на бинарное дерево
 */
@@ -649,11 +669,76 @@ int getValueVar (NameTable_t* table_var)
 }
 // --------------------------------------------------------------------------------------------------
 
+// --------------------------------------------------------------------------------------------------
+/**
+ @brief Функция создания ряда Тейлора до 0(x^4)
+ @param [in] tree Указатель на дерево
+*/
+int makeTaylor (BinTree_t* tree)
+{
+    assert (tree);
 
-// // --------------------------------------------------------------------------------------------------
-// int makeTeylor (BinTree_t* tree)
-// {
-//     assert (tree);
+    int index_var = nameTableFind (tree->table_var, tree->diff_var);
+    tree->table_var->data[index_var].value = 0.0;
 
+    Node_t* old_node = tree->null;
+    Node_t* all_parent = newNode ();
+    Node_t* diff_node = NULL;
+    Node_t* result = newNode ();
+    result->type = _TYPE_NUM;
+    result->value.dval = 0.0;
 
-// }
+    size_t size = (size_t) -1;
+
+    FILE* stream = fopen (STANDARD_DUMP_LATEX_ADR, "a");
+    if (stream == NULL)
+        EXIT_FUNC ("NULL file", 1);
+
+    double power_count = 0;
+    for (int i = 0; i < 4; i++)
+    {
+        if (i != 0)
+        {
+            diff_node = diffNode (old_node, all_parent, tree->diff_var, tree->table_var);
+            diff_node->parent = NULL;
+        }
+        else
+        {
+            diff_node = copyNode (tree->null, all_parent);
+            diff_node->parent = NULL;
+        }
+        deleteNode (old_node);
+
+        old_node = copyNode (diff_node, all_parent);
+        replaceNodeVar (diff_node, tree->table_var);
+        optimizeNode (diff_node, &size);
+        diff_node->value.dval /= fact (power_count);
+
+        Node_t* power = newNode ();
+        power->type = _TYPE_NUM;
+        power->value.dval = power_count;
+        power_count++;
+
+        result = createOperNodeBin (result, createOperNodeBin (diff_node, createOperNodeBin
+                 (createVarNode (result, index_var), power, all_parent, POW_OPER), all_parent, MUL_OPER), all_parent, ADD_OPER);
+        result->parent = NULL;
+        optimizeNode (result, &size);
+    }
+    free (all_parent);
+    deleteNode (old_node);
+
+    result->left->parent = result;
+    result->right->parent = result;
+
+    fprintf (stream, "\n\\begin{equation}\n");
+    fprintf (stream, "f(x)=");
+    dumpNodeLaTex (result, stream, tree->table_var);
+    fprintf (stream, "+o(x^%d)\n\\end{equation}\n", 4 - 1);
+    fclose (stream);
+
+    tree->null = result;
+    tree->size = getSizeTree (result);
+
+    return 0;
+}
+// ---------------------------------------------------------------------------------------------------
