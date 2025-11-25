@@ -36,7 +36,8 @@ enum ALL_OPER
     ASH_OPER   = 20,
     ACH_OPER   = 21,
     ATH_OPER   = 22,
-    ACTH_OPER  = 23
+    ACTH_OPER  = 23,
+    FACT_OPER  = 24
 };
 // ---------------------------------------------------------------------------------------------------
 
@@ -84,7 +85,8 @@ const OperData_t CODE_WORDS[] =
     { "ash",   0,   ASH_OPER,   NULL},
     { "ach",   0,   ACH_OPER,   NULL},
     { "ath",   0,   ATH_OPER,   NULL},
-    { "acth",  0,   ACTH_OPER,  NULL}
+    { "acth",  0,   ACTH_OPER,  NULL},
+    { "fact",  0,   FACT_OPER,  *calc_Fact}
 };
 // ---------------------------------------------------------------------------------------------------
 /// @brief Команда, начиная с которой начинается цикл поиска команды
@@ -118,7 +120,8 @@ const char LATEX_COMAND[][40] =
     "\\operatorname{arsinh}",
     "\\operatorname{arcosh}",
     "\\operatorname{artanh}",
-    "\\operatorname{arcoth}"
+    "\\operatorname{arcoth}",
+    "!"
 };
 // ---------------------------------------------------------------------------------------------------
 

@@ -1,7 +1,7 @@
 #ifndef DIN_TREE_CONFIG_H
 #define BIN_TREE_CONFIG_H
 
-// #define DEBUG_MODE
+#define DEBUG_MODE
 
 // -------------------------------------------------------------------------------------------------------
 /// @brief Расположение директории с дампами дерева

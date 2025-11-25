@@ -59,8 +59,8 @@ int binTreeDumpHTML (BinTree_t* tree,
     else
     {
         fprintf (html_file,
-                "<img src=%simg%d.png width=%zupx>\n",
-                STANDARD_DUMP_IMAGE_ADR, AMOUNT_DUMP_IMAGE,
+                "<img src=Image/img%d.png width=%zupx>\n",
+                AMOUNT_DUMP_IMAGE,
                 tree->size * STANDARD_SIZE_GRAPH_BLOCK);
     }
     AMOUNT_DUMP_IMAGE++;
@@ -403,7 +403,7 @@ int binTreeDumpLaTex (BinTree_t* tree,
 {
     assert (tree);
     // reason == NULL - не ошибка
-    LATEX (tree->null, tree->table_var, reason);
+    dumpToLaTex (tree->null, tree->table_var, reason);
     return 0;
 }
 // -------------------------------------------------------------------------------------------------------
@@ -427,12 +427,12 @@ int dumpToLaTex (Node_t* node,
     if (stream == NULL)
         EXIT_FUNC("NULL file", 1);
 
+    fprintf (stream, "\\begin{align*}\n");
     if (reason != NULL)
-        fprintf (stream, "%s\n", reason);
+        fprintf (stream, "\\text{%s:}", reason);
 
-    fprintf (stream, "\\begin{equation}\n");
     dumpNodeLaTex (node, stream, table_var);
-    fprintf (stream, "\n\\end{equation}\n");
+    fprintf (stream, "\\\\\n\\end{align*}\n");
 
     fclose (stream);
 
@@ -480,40 +480,6 @@ int dumpNodeLaTex (Node_t* node,
     }
 
     if (node->right)    { dumpNodeLaTex (node->right, stream, table_var); }
-
-    // if (node->left)
-    //     dumpNodeLaTex (node->left, stream, table_var);
-
-    // if (node->type == _TYPE_OPER)
-    //     fprintf (stream, "%s", LATEX_COMAND[node->value.ival]);
-    //     // printf ("%s", LATEX_COMAND[node->value.ival]);
-
-    // else if (node->type == _TYPE_NUM)
-    // {
-    //     if (node->parent != NULL && node->parent->value.ival == DIV_OPER)
-    //         fprintf (stream, "{%lg}", node->value.dval);
-
-    //     else if (node->parent != NULL && node->parent->right == node && node->parent->value.ival == POW_OPER)
-    //         fprintf (stream, "{%lg}", node->value.dval);
-
-    //     else
-    //         fprintf (stream, " %lg ", node->value.dval);
-    // }
-    // else if (node->type == _TYPE_VAR)
-    // {
-    //     if (node->parent != NULL && node->parent->value.ival == DIV_OPER)
-    //         fprintf (stream, "{%s}", nameTableGetName (table_var, node->value.ival));
-
-    //     else if (node->parent != NULL && node->parent->right == node && node->parent->value.ival == POW_OPER)
-    //         fprintf (stream, "{%s}", nameTableGetName (table_var, node->value.ival));
-
-    //     else
-    //         fprintf (stream, " %s ", nameTableGetName (table_var, node->value.ival));
-    // }
-
-    // if (node->right)
-    //     dumpNodeLaTex (node->right, stream, table_var);
-
     return 0;
 }
 // -------------------------------------------------------------------------------------------------------
@@ -552,6 +518,7 @@ int cleanLaTex ()
              "\\usepackage[utf8]{inputenc}\n"
              "\\usepackage[russian]{babel}\n"
              "\\usepackage{amsmath}\n"
+             "\\usepackage{mathtools}\n"
              "\\usepackage{amssymb}\n"
              "\\usepackage{caption}\n"
              "\\begin{document}\n");

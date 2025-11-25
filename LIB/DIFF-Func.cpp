@@ -10,6 +10,8 @@
 #include "../BinTree/Header/BinTreeFunc.h"
 #include "../BinTree/Header/BinTreeCalcFunc.h"
 #include "../BinTree/Header/BinTreeConfig.h"
+#include "../NameTable/NameTableFunc.h"
+#include "../NameTable/NameTableType.h"
 
 #include "DIFF_Func.h"
 #include "../Common/Common.h"
@@ -205,8 +207,106 @@ int DIFF_Calc (DIFF_Tree_t tree)
 }
 // ---------------------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------------------
+int DIFF_MakeTeylor (DIFF_Tree_t tree)
+{
+    assert (tree);
 
-// int DIFF_MakeTeylor ()
+    int index_var = nameTableFind (tree->table_var, tree->diff_var);
+    tree->table_var->data[index_var].value = 0.0;
+
+    Node_t* old_node = tree->null;
+    Node_t* all_parent = newNode ();
+    Node_t* diff_node = NULL;
+    Node_t* result = newNode ();
+    result->type = _TYPE_NUM;
+    result->value.dval = 0.0;
+
+    FILE* stream = fopen (STANDARD_DUMP_LATEX_ADR, "a");
+    if (stream == NULL)
+        EXIT_FUNC ("NULL file", 1);
+
+    double power_count = 0;
+    for (int i = 0; i < 4; i++)
+    {
+        if (i != 0)
+        {
+            diff_node = diffNode (old_node, all_parent, tree->diff_var, tree->table_var);
+            diff_node->parent = NULL;
+        }
+        else
+        {
+            diff_node = copyNode (tree->null, all_parent);
+            diff_node->parent = NULL;
+        }
+        deleteNode (old_node);
+
+        old_node = copyNode (diff_node, all_parent);
+        replaceNodeVar (diff_node, tree->table_var);
+
+        size_t old_size = (size_t) -1;
+        size_t new_size = (size_t) -1; // Что бы не было проблем с размерами
+        calculateNum (diff_node, &new_size);
+        diff_node->value.dval /= fact (power_count);
+
+        Node_t* power = newNode ();
+        power->type = _TYPE_NUM;
+        power->value.dval = power_count;
+        power_count++;
+
+        result = createOperNodeBin (result, createOperNodeBin (diff_node, createOperNodeBin
+                 (createVarNode (result, index_var), power, all_parent, POW_OPER), all_parent, MUL_OPER), all_parent, ADD_OPER);
+        result->parent = NULL;
+
+        do
+        {
+            old_size = new_size;
+            calculateNum (result, &new_size);
+            Node_t* buffer = abridgeNum (result, &new_size);
+            if (buffer != NULL) { result = buffer; }
+        } while (old_size != new_size);
+    }
+    free (all_parent);
+    deleteNode (old_node);
+
+    BinTree_t new_tree = {};
+    new_tree.null = result;
+    new_tree.table_var = tree->table_var;
+    new_tree.table_cmd = tree->table_cmd;
+    new_tree.diff_var = tree->diff_var;
+    new_tree.size = 4;
+
+    size_t old_size = (size_t) -1;
+    size_t new_size = (size_t) -1;
+
+    binTreeDumpHTML (&new_tree, "Test");
+    do
+    {
+        old_size = new_size;
+        calculateNum (result, &new_size);
+        result = abridgeNum (result, &new_size);
+    }
+    while (new_size != old_size);
+
+    // FILE* stream = fopen (STANDARD_DUMP_LATEX_ADR, "a");
+    // if (stream == NULL)
+    //     EXIT_FUNC ("NULL file", 1);
+
+    fprintf (stream, "\n\\begin{equation}\n");
+    fprintf (stream, "f(x)=");
+    dumpNodeLaTex (result, stream, tree->table_var);
+    fprintf (stream, "\n\\end{equation}\n");
+    fclose (stream);
+
+    tree->null = result;
+    tree->size = getSizeTree (result);
+
+    return 0;
+}
+// ---------------------------------------------------------------------------------------------------
+
+// Node_t* createMulTeylor (const int number)
 // {
+
 
 // }

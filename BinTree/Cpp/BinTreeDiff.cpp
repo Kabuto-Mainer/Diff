@@ -41,6 +41,7 @@ int binTreeDiff (BinTree_t* old_tree,
     new_tree->table_cmd = old_tree->table_cmd;
     new_tree->table_var = old_tree->table_var;
     new_tree->diff_var = old_tree->diff_var;
+    new_tree->size = getSizeTree (new_tree->null);
 
     deleteNode (old_tree->null);
     return 0;
@@ -66,7 +67,7 @@ Node_t* diffNode (Node_t* old_node,
     assert (name_var);
     assert (new_parent);
 
-    LATEX (old_node, table_var, "До взятия производной\n");
+    LATEX (old_node, table_var, "До взятия производной");
     Node_t* node = NULL;
     if (old_node->type == _TYPE_NUM)
     {
@@ -118,7 +119,7 @@ Node_t* diffNode (Node_t* old_node,
 
     node->left->parent = node;
     node->right->parent = node;
-    LATEX (node, table_var, "После взятия производной\n");
+    LATEX (node, table_var, "После взятия производной");
     return node;
 }
 // --------------------------------------------------------------------------------------------------
@@ -391,7 +392,7 @@ Node_t* calculateNum (Node_t* node,
     if (node->type == _TYPE_NUM)
         return node;
 
-    Node_t* left = NULL;
+    Node_t* left = (Node_t*) 1; // У некоторых функций есть только правый аргумент
     Node_t* right = NULL;
 
     if (node->left)
@@ -420,116 +421,141 @@ Node_t* calculateNum (Node_t* node,
 Node_t* abridgeNum (Node_t* node,
                     size_t* size)
 {
-    assert (node);
-    assert (size);
+    assert(size);
+    printf ("ADR: %p\n", node);
+    if (node == NULL) return NULL;
 
-    if (node->type != _TYPE_OPER || node->left == NULL)
-        return 0;
+    if (node->type != _TYPE_OPER)
+        return node;
 
-    Node_t* ret_node = node;
-    if (node->left->type == _TYPE_OPER)
-        abridgeNum (node->left, size);
+    if (node->left)
+        node->left = abridgeNum(node->left, size);
+    if (node->right)
+        node->right = abridgeNum(node->right, size);
 
-    if (node->right->type == _TYPE_OPER)
-        abridgeNum (node->right, size);
+    Node_t* L = node->left;
+    Node_t* R = node->right;
 
-    if (node->left->type == _TYPE_NUM && fabs (node->left->value.dval) < EPS)
+    if (!L && !R)
     {
-        // printf ("L-0");
-        // printf ("   NODE: %p\n", node);
+        deleteNode (node);
+        (*size)--;
+        return NULL;
+    }
 
-        if (node->value.ival == ADD_OPER)
+    // if (!L && R)
+    // {
+    //     replaceNearNode(R, node);
+    //     deleteNode(node);
+    //     (*size)--;
+    //     return R;
+    // }
+    // if (L && !R) {
+    //     replaceNearNode(L, node);
+    //     deleteNode(node);
+    //     (*size)--;
+    //     return L;
+    // }
+
+    int oper = node->value.ival;
+    if (L->type == _TYPE_NUM && fabs (L->value.dval) < EPS)
+    {
+        if (oper == ADD_OPER)
         {
-            ret_node = node->right;
-            replaceNearNode (node->right, node);
-            free (node->left);
-            free (node);
-            *size -= 2;
+            node->type = R->type;
+            node->value.dval = R->value.dval;
+            node->left = R->left;
+            node->right = R->right;
+            free (L);
+            free (R);
+            (*size) -= 2;
         }
-        else if (node->value.ival == MUL_OPER || node->value.ival == DIV_OPER)
+        else if (oper == MUL_OPER || oper == DIV_OPER)
         {
-            ret_node = node->left;
-            replaceNearNode (node->left, node);
-            deleteNode (node->right);
-            free (node);
-            *size -= 2;
+            node->type = _TYPE_NUM;
+            node->value.dval = 0.0;
+            node->left = NULL;
+            node->right = NULL;
+            deleteNode (L);
+            deleteNode (R);
+            (*size) -= 2;
         }
     }
-    else if (node->right->type == _TYPE_NUM && fabs (node->right->value.dval) < EPS)
-    {
-        // printf ("R-0");
-        // printf ("   NODE: %p\n", node);
 
-        if (node->value.ival == ADD_OPER || node->value.ival == SUB_OPER)
+    else if (R->type == _TYPE_NUM && fabs (R->value.dval) < EPS)
+    {
+        if (oper == ADD_OPER || oper == SUB_OPER)
         {
-            ret_node = node->left;
-            replaceNearNode (node->left, node);
-            free (node->right);
-            free (node);
-            *size -= 2;
+            node->type = L->type;
+            node->value.dval = L->value.dval;
+            node->left = L->left;
+            node->right = L->right;
+            free (L);
+            free (R);
+            (*size) -= 2;
         }
         else if (node->value.ival == MUL_OPER)
         {
-            ret_node = node->right;
-            replaceNearNode (node->right, node);
-            deleteNode (node->left);
-            free (node);
-            *size -= 2;
+            node->type = _TYPE_NUM;
+            node->value.dval = 0.0;
+            node->left = NULL;
+            node->right = NULL;
+            deleteNode (L);
+            deleteNode (R);
+            (*size) -= 2;
         }
         else if (node->value.ival == POW_OPER)
         {
-            ret_node = node->right;
-            replaceNearNode (node->right, node);
-            node->right->value.dval = 1.0;
-            deleteNode (node->left);
-            free (node);
-            *size -= 2;
+            printf ("POWER\n");
+            node->type = _TYPE_NUM;
+            node->value.dval = 1.0;
+            node->left = NULL;
+            node->right = NULL;
+            deleteNode (L);
+            deleteNode (R);
+            (*size) -= 2;
         }
     }
-    else if (node->left->type == _TYPE_NUM && fabs (node->left->value.dval - 1.0) < EPS)
-    {
-        // printf ("L-1");
-        // printf ("   NODE: %p\n", node);
-        if (node->value.ival == MUL_OPER)
-        {
-            ret_node = node->right;
-            replaceNearNode (node->right, node);
-            free (node->left);
-            free (node);
-            *size -= 2;
-        }
-        else if (node->value.ival == POW_OPER)
-        {
-            ret_node = node->left;
-            replaceNearNode (node->left, node);
-            free (node->right);
-            free (node);
-            *size -= 2;
-        }
-    }
-    else if (node->right->type == _TYPE_NUM && fabs (node->right->value.dval - 1.0) < EPS)
-    {
-        // printf ("R-1");
-        // printf ("   NODE: %p\n", node);
 
-        if (node->value.ival == MUL_OPER || node->value.ival == DIV_OPER)
+    else if (L->type == _TYPE_NUM && fabs (L->value.dval - 1.0) < EPS)
+    {
+        if (oper == MUL_OPER)
         {
-            ret_node = node->right;
-            replaceNearNode (node->right, node);
-            free (node->left);
-            free (node);
-            *size -= 2;
+            node->type = R->type;
+            node->value.dval = R->value.dval;
+            node->left = R->left;
+            node->right = R->right;
+            free (L);
+            free (R);
+            (*size) -= 2;
         }
-        else if (node->value.ival == POW_OPER)
+        if (node->value.ival == POW_OPER)
         {
-            ret_node = node->left;
-            replaceNearNode (node->left, node);
-            free (node->right);
-            free (node);
-            *size -= 2;
+            node->type = _TYPE_NUM;
+            node->value.dval = 1.0;
+            node->left = NULL;
+            node->right = NULL;
+            deleteNode (L);
+            deleteNode (R);
+            (*size) -= 2;
         }
     }
-    return ret_node;
+
+    else if (R->type == _TYPE_NUM && fabs (R->value.dval - 1.0) < EPS)
+    {
+        if (oper == MUL_OPER || oper == DIV_OPER || oper == POW_OPER)
+        {
+            node->type = L->type;
+            node->value.dval = L->value.dval;
+            node->left = L->left;
+            node->right = L->right;
+            free (L);
+            free (R);
+            (*size) -= 2;
+        }
+    }
+
+    return node;
 }
 // --------------------------------------------------------------------------------------------------
 
@@ -539,32 +565,20 @@ Node_t* abridgeNum (Node_t* node,
  @param [in] first Узел, на который заменяют
  @param [in] second Узел, который заменяют
 */
-int replaceNearNode (Node_t* first,
-                     Node_t* second)
+int replaceNearNode (Node_t* first, Node_t* second)
 {
-    assert (first);
-    assert (second);
+    assert(first);
+    assert(second);
 
-    // printf ("FIRST BEFORE\n");
-    // dumpNode (first);
-    // printf ("SECOND BEFORE\n");
-    // dumpNode (second);
     first->parent = second->parent;
     if (second->parent != NULL)
     {
         if (second->parent->left == second)     { second->parent->left = first; }
         else                                    { second->parent->right = first; }
     }
-    // printf ("PARENT\n");
-    // dumpNode (first->parent);
-    // printf ("FIRST AFTER\n");
-    // dumpNode (first);
-    // printf ("SECOND AFTER\n");
-    // dumpNode (second);
     return 0;
 }
 // --------------------------------------------------------------------------------------------------
-
 
 // --------------------------------------------------------------------------------------------------
 /**
@@ -636,4 +650,10 @@ int getValueVar (NameTable_t* table_var)
 // --------------------------------------------------------------------------------------------------
 
 
+// // --------------------------------------------------------------------------------------------------
+// int makeTeylor (BinTree_t* tree)
+// {
+//     assert (tree);
 
+
+// }

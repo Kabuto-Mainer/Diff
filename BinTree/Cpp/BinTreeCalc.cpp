@@ -73,6 +73,9 @@ Node_t* calc_Trig (Node_t* node)
     if (node->left != NULL)     { free (node->left); }
     free (node->right);
 
+    node->left = NULL;
+    node->right = NULL;
+
     return node;
 }
 // --------------------------------------------------------------------------------------------------
@@ -107,6 +110,9 @@ Node_t* calc_ATrig (Node_t* node)
 
     if (node->left != NULL) { free (node->left); }
     free (node->right);
+
+    node->left = NULL;
+    node->right = NULL;
 
     return node;
 }
@@ -146,9 +152,11 @@ Node_t* calc_Degree (Node_t* node)
         default: { CALC_ERROR("Не корректный тип", node); }
     }
 
-    if (t_oper == POW_OPER || node->left)
-        free (node->left);
+    if (t_oper == POW_OPER || node->left)   { free (node->left); }
     free (node->right);
+
+    node->left = NULL;
+    node->right = NULL;
 
     return node;
 }
@@ -180,6 +188,35 @@ Node_t* calc_Hype (Node_t* node)
 
     if (node->left != NULL)     { free (node->left); }
     free (node->right);
+
+    node->left = NULL;
+    node->right = NULL;
+
+    return node;
+}
+// --------------------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------------------
+/**
+ @brief Функция вычисления факториала
+ @param [in] node Указатель на узел с операцией
+ @return Указатель на числовой узел
+*/
+Node_t* calc_Fact (Node_t* node)
+{
+    assert (node);
+
+    if (fabs (node->right->value.dval - round (node->right->value.dval)) >= EPS)
+        CALC_ERROR ("Аргумент факториала не целый", node);
+
+    node->type = _TYPE_NUM;
+    node->value.dval = fact (node->right->value.dval);
+
+    if (node->left != NULL)     { free (node->left); }
+    free (node->right);
+
+    node->left = NULL;
+    node->right = NULL;
 
     return node;
 }
@@ -221,3 +258,25 @@ double coth (double x)
     return 1.0 / tanh (x);
 }
 // --------------------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------------------
+/**
+ @brief Рекурсивная функция нахождения факториала
+ @param [in] x Полученный аргумент
+ @return Факториал аргумента
+*/
+double fact (double x)
+{
+    if (x > EPS)
+        x *= fact (x - 1);
+
+    else if (x < (EPS * -1.0))
+        x *= fact (x + 1);
+
+    else
+        return 1;
+
+    return x;
+}
+// --------------------------------------------------------------------------------------------------
+

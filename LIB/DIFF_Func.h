@@ -67,6 +67,8 @@ int DIFF_Quit ();
 int DIFF_Calc (DIFF_Tree_t tree);
 // ---------------------------------------------------------------------------------------------------
 
+int DIFF_MakeTeylor (DIFF_Tree_t tree);
+
 
 
 #endif // DIFF_FUNC_H
