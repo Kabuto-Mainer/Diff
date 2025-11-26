@@ -3,77 +3,89 @@ Log file of program diff
 Info: Initialization of DIFF_Lib
 [LIB/DIFF-Func.cpp:28]
 Time start = 0
-Time call = 17399
-Time work = 17396
+Time call = 12125
+Time work = 12123
 
 Info: Creating DIFF_Tree_t
 [LIB/DIFF-Func.cpp:41]
 Time start = 0
-Time call = 17478
-Time work = 17476
+Time call = 12171
+Time work = 12170
 
 Info: Successfully creating
 [LIB/DIFF-Func.cpp:49]
 Time start = 0
-Time call = 17550
-Time work = 17547
+Time call = 12201
+Time work = 12199
 
 Info: Start uploading tree
 [LIB/DIFF-Func.cpp:68]
 Time start = 0
-Time call = 18768
-Time work = 18765
+Time call = 12990
+Time work = 12987
 
 Info: Uploading tree successful
 [LIB/DIFF-Func.cpp:70]
 Time start = 0
-Time call = 20246
-Time work = 20243
+Time call = 13769
+Time work = 13767
 
 Info: Start bring diff
 [LIB/DIFF-Func.cpp:87]
 Time start = 0
-Time call = 20961
-Time work = 20958
+Time call = 14150
+Time work = 14148
 
 Info: End bring diff
 [LIB/DIFF-Func.cpp:103]
 Time start = 0
-Time call = 25367
-Time work = 25362
+Time call = 16054
+Time work = 16052
 
 Info: Start making Taylor row
 [LIB/DIFF-Func.cpp:220]
 Time start = 0
-Time call = 25411
-Time work = 25409
+Time call = 16092
+Time work = 16090
 
 Info: End making Taylor row
 [LIB/DIFF-Func.cpp:226]
 Time start = 0
-Time call = 40211
-Time work = 40208
+Time call = 27914
+Time work = 27912
+
+Info: Start making common graphic
+[LIB/DIFF-Func.cpp:262]
+Time start = 0
+Time call = 28580
+Time work = 28578
+
+Info: End making praphic
+[LIB/DIFF-Func.cpp:264]
+Time start = 0
+Time call = 28903
+Time work = 28901
 
 Info: Start making swing
-[LIB/DIFF-Func.cpp:243]
+[LIB/DIFF-Func.cpp:244]
 Time start = 0
-Time call = 41179
-Time work = 41176
+Time call = 29076
+Time work = 29074
 
 Info: End making swing
-[LIB/DIFF-Func.cpp:245]
+[LIB/DIFF-Func.cpp:246]
 Time start = 0
-Time call = 43113
-Time work = 43110
+Time call = 32116
+Time work = 32114
 
 Info: Start delete tree
 [LIB/DIFF-Func.cpp:118]
 Time start = 0
-Time call = 43174
-Time work = 43172
+Time call = 32152
+Time work = 32150
 
 Info: End delete tree
 [LIB/DIFF-Func.cpp:122]
 Time start = 0
-Time call = 43264
-Time work = 43261
+Time call = 32214
+Time work = 32213

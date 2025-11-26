@@ -234,6 +234,7 @@ int DIFF_MakeTaylor (DIFF_Tree_t tree)
 // ---------------------------------------------------------------------------------------------------
 /**
  @brief Функция проведения касательной к графику функции
+ @param [in] tree Объект
 */
 int DIFF_Swing (DIFF_Tree_t tree)
 {
@@ -241,9 +242,28 @@ int DIFF_Swing (DIFF_Tree_t tree)
 
     cleanGraphic ();
     DIFF_Inf ("Start making swing");
-    makeGraphicGnuPlot (tree);
+    makeGraphicSwing (tree);
     DIFF_Inf ("End making swing");
 
     return 0;
 }
 // ---------------------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------------------
+/**
+ @brief Функция создания графика
+ @param [in] tree Объект
+*/
+int DIFF_Graph (DIFF_Tree_t tree)
+{
+    assert (tree);
+
+    cleanGraphic ();
+    DIFF_Inf ("Start making common graphic");
+    makeGraphic (tree);
+    DIFF_Inf ("End making praphic");
+
+    return 0;
+}
+// ---------------------------------------------------------------------------------------------------
+

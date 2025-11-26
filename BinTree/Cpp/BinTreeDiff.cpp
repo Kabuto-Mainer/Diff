@@ -700,12 +700,13 @@ int makeTaylor (BinTree_t* tree)
         EXIT_FUNC ("NULL file", 1);
 
     double power_count = 0;
-    for (int i = 0; i < 4; i++)
+    for (int i = 0; i < POWER_TAYLOR; i++)
     {
         if (i != 0)
         {
             diff_node = diffNode (old_node, all_parent, tree->diff_var, tree->table_var);
             diff_node->parent = NULL;
+            LATEX (diff_node, tree->table_var, "Производная для построения Тейлора");
         }
         else
         {
@@ -739,7 +740,7 @@ int makeTaylor (BinTree_t* tree)
     fprintf (stream, "\n\\begin{equation}\n");
     fprintf (stream, "f(x)=");
     dumpNodeLaTex (result, stream, tree->table_var);
-    fprintf (stream, "+o(x^%d)\n\\end{equation}\n", 4 - 1);
+    fprintf (stream, "+o(x^%d)\n\\end{equation}\n", POWER_TAYLOR - 1);
     fclose (stream);
 
     tree->null = result;
@@ -764,9 +765,11 @@ int cleanGraphic ()
              "set output \'%s/%d.png\'\n"
              "set grid\n"
              "set xlabel \"x\"\n"
-             "set ylabel \"y\"\n",
+             "set ylabel \"y\"\n"
+             "set xrange [%d:%d]\n",
              STANDARD_GRAPHIC_PNG_ADR,
-             AMOUNT_GRAPHICS);
+             AMOUNT_GRAPHICS,
+             -1 * WIDTH_GRAPH, WIDTH_GRAPH);
     fclose (stream);
     return 0;
 }
@@ -788,7 +791,8 @@ int pushGnuPlotFunc (FILE* stream,
 
     if (node->type == _TYPE_NUM)
     {
-        fprintf (stream, " %lg ", node->value.dval);
+        if (node->value.dval > 0)   { fprintf (stream, " %lg ", node->value.dval); }
+        else                        { fprintf (stream, " (%lg) ", node->value.dval); }
         return 0;
     }
     if (node->type == _TYPE_VAR)
@@ -823,13 +827,47 @@ int pushGnuPlotFunc (FILE* stream,
 }
 // -------------------------------------------------------------------------------------------------------
 
+// -------------------------------------------------------------------------------------------------------
+/**
+ @brief Функция построения графика по математической формуле
+ @param [in] tree Указатель на дерево
+*/
+int makeGraphic (BinTree_t* tree)
+{
+    assert (tree);
+
+    FILE* stream = fopen (STANDARD_GRAPHIC_ADR, "a");
+    if (stream == NULL)
+        EXIT_FUNC("NULL file", 1);
+
+    fprintf (stream, "f(x) =");
+    pushGnuPlotFunc (stream, tree->null, tree->table_var);
+    fprintf (stream, "\nplot f(x)\n");
+    fclose (stream);
+
+    char cmd[200] = "";
+    sprintf (cmd, "gnuplot %s", STANDARD_GRAPHIC_ADR);
+    int trash = system (cmd);
+    (void) trash;
+
+    FILE* latex = fopen (STANDARD_DUMP_LATEX_ADR, "a");
+    if (latex == NULL)
+        EXIT_FUNC("NULL file", 1);
+
+    fprintf (latex, "\\includegraphics{%d}\n", AMOUNT_GRAPHICS);
+    fclose (latex);
+
+    return 0;
+}
+// -------------------------------------------------------------------------------------------------------
+
 
 // -------------------------------------------------------------------------------------------------------
 /**
- @brief Функция записи формулы по дереву для постройки графика
+ @brief Функция записи формулы по дереву для постройки графика с проведением касательной к выбранной точке
  @param [in] tree Указатель на дерево
 */
-int makeGraphicGnuPlot (BinTree_t* tree)
+int makeGraphicSwing (BinTree_t* tree)
 {
     assert (tree);
 
@@ -854,6 +892,7 @@ int makeGraphicGnuPlot (BinTree_t* tree)
     free (diff->parent);
     deleteNode (buff);
     diff->parent = NULL;
+    LATEX (diff, tree->table_var, "Производная для вычисления касательной");
 
     size_t size = (size_t) -1;
     replaceNodeVar (diff, tree->table_var);
@@ -861,10 +900,13 @@ int makeGraphicGnuPlot (BinTree_t* tree)
     double k = diff->value.dval;
     free (diff);
 
+    // set xrange [LEFT:RIGHT]
+
+    // fprintf (stream, "set xrange [%d:%d]\n", round (x) - WIDTH_GRAPH, round (x) + WIDTH_GRAPH);
+
     double b = y - k * x;
     fprintf (stream, "\ng(x) = %lg * x + %lg\n", k, b);
-    fprintf (stream, "plot f(x), g(x)\n"
-             "pause -1\n");
+    fprintf (stream, "plot f(x), g(x)\n");
     fclose (stream);
 
     char cmd[200] = "";
@@ -877,12 +919,6 @@ int makeGraphicGnuPlot (BinTree_t* tree)
         EXIT_FUNC("NULL file", 1);
 
     fprintf (latex, "\\includegraphics{%d}\n", AMOUNT_GRAPHICS);
-    // fprintf (latex, "\\begin{figure}[h]\n"
-    //          "\\centering\n"
-    //          "\\includegraphics[width=0.7\textwidth]{%s/%d.png}\n"
-    //          "\\caption{График функции с касательной}\n"
-    //          "\\label{fig:myimg}\n"
-    //          "\\end{figure}\n", STANDARD_GRAPHIC_PNG_ADR, AMOUNT_GRAPHICS);
     fclose (latex);
 
     return 0;

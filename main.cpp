@@ -11,6 +11,7 @@ int main ()
     DIFF_GetTree (tree, "Data/Input.txt");
     DIFF_BringDiff (&tree);
     DIFF_MakeTaylor (tree);
+    DIFF_Graph (tree);
     DIFF_Swing (tree);
     // DIFF_Optimization (tree);
     DIFF_TreeDtr (tree);

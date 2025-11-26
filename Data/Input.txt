@@ -1,16 +1,4 @@
-(+
-    (sin
-        nil
-        (x nil nil)
-    )
-    (*
-        (0.1 nil nil)
-        (sin
-            nil
-            (*
-                (10 nil nil)
-                (x nil nil)
-            )
-        )
-    )
+(sin
+    nil
+    (x nil nil)
 )

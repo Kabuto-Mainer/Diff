@@ -604,7 +604,7 @@ int dumpNode (Node_t* node)
 int printRandomPhraze (const char* input_file,
                       FILE* output_stream)
 {
-    assert (input_ifile);
+    assert (input_file);
     assert (output_stream);
 
     FILE* stream = fopen (input_file, "r");
