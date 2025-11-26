@@ -1,4 +1,4 @@
-#ifndef DIN_TREE_CONFIG_H
+#ifndef BIN_TREE_CONFIG_H
 #define BIN_TREE_CONFIG_H
 
 #define DEBUG_MODE
@@ -18,6 +18,9 @@ const char STANDARD_DUMP_IMAGE_ADR[] = "Dump/BinTree/Image/";
 
 /// @brief Расположение tex файла
 const char STANDARD_DUMP_LATEX_ADR[] = "Dump/BinTree/dump.tex";
+
+/// @brief Расположение файла с графиками
+const char STANDARD_GRAPHIC_ADR[] = "Dump/BinTree/plot.plt";
 // -------------------------------------------------------------------------------------------------------
 
 // -------------------------------------------------------------------------------------------------------

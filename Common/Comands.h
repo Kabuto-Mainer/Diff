@@ -93,7 +93,6 @@ const OperData_t CODE_WORDS[] =
 const int START_COMAND = SIN_OPER; // Первая после математических операций
 // ---------------------------------------------------------------------------------------------------
 
-// ---------------------------------------------------------------------------------------------------
 /// @brief
 const char LATEX_COMAND[][40] =
 {
@@ -122,6 +121,58 @@ const char LATEX_COMAND[][40] =
     "\\operatorname{artanh}",
     "\\operatorname{arcoth}",
     "!"
+};
+// ---------------------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------------------
+/// @brief Возможное типы операций
+enum TYPE_OPER_TO_PUSH
+{
+    ATOM_PRE_OPER   = 0,
+    BIN_PRE_OPER    = 1,
+    BIN_IN_OPER     = 2,
+    BIN_POST_OPER   = 3
+};
+// ---------------------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------------------
+/// @brief Структура типов операций и их имен
+struct OperPushFile_t
+{
+    const char* name;
+    TYPE_OPER_TO_PUSH type_push;
+};
+// ---------------------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------------------
+/// @brief
+const OperPushFile_t GNUPLOT_COMAND[] =
+{
+    { "+",      BIN_IN_OPER   },
+    { "-",      BIN_IN_OPER   },
+    { "*",      BIN_IN_OPER   },
+    { "/",      BIN_IN_OPER   },
+    { "sin",    ATOM_PRE_OPER },
+    { "cos",    ATOM_PRE_OPER },
+    { "tan",    ATOM_PRE_OPER },
+    { "cot",    ATOM_PRE_OPER },
+    { "asin",   ATOM_PRE_OPER },
+    { "acos",   ATOM_PRE_OPER },
+    { "atan",   ATOM_PRE_OPER },
+    { "acot",   ATOM_PRE_OPER },
+    { "log",    BIN_PRE_OPER  },
+    { "ln",     ATOM_PRE_OPER },
+    { "pow",    BIN_PRE_OPER  },
+    { "exp",    ATOM_PRE_OPER },
+    { "sh",     ATOM_PRE_OPER },
+    { "ch",     ATOM_PRE_OPER },
+    { "th",     ATOM_PRE_OPER },
+    { "cth",    ATOM_PRE_OPER },
+    { "ash",    ATOM_PRE_OPER },
+    { "ach",    ATOM_PRE_OPER },
+    { "ath",    ATOM_PRE_OPER },
+    { "acth",   ATOM_PRE_OPER },
+    { "fact",   ATOM_PRE_OPER }
 };
 // ---------------------------------------------------------------------------------------------------
 

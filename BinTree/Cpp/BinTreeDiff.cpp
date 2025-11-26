@@ -36,11 +36,10 @@ int binTreeDiff (BinTree_t* old_tree,
     if (old_tree->diff_var == NULL) { getVarDiff (old_tree); }
 
     Node_t* new_null = diffNode (old_tree->null, new_tree->null, old_tree->diff_var, old_tree->table_var);
-    // printf ("OLD: %p\nNEW: %p\n", new_tree->null, new_null);
     free (new_tree->null);
     new_tree->null = new_null;
     new_tree->null->parent = NULL;
-    // (void) new_null;
+
     new_tree->table_cmd = old_tree->table_cmd;
     new_tree->table_var = old_tree->table_var;
     new_tree->diff_var = old_tree->diff_var;
@@ -425,7 +424,7 @@ Node_t* abridgeNum (Node_t* node,
                     size_t* size)
 {
     assert(size);
-    printf ("ADR: %p\n", node);
+    // printf ("ADR: %p\n", node);
     if (node == NULL) return NULL;
 
     if (node->type != _TYPE_OPER)
@@ -495,7 +494,6 @@ Node_t* abridgeNum (Node_t* node,
         }
         else if (node->value.ival == POW_OPER)
         {
-            printf ("POWER\n");
             node->type = _TYPE_NUM;
             node->value.dval = 1.0;
             node->left = NULL;
@@ -742,3 +740,148 @@ int makeTaylor (BinTree_t* tree)
     return 0;
 }
 // ---------------------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------------------
+/**
+ @brief Фукнция очистки файла с графиком и заполнение его заголовков
+*/
+int cleanGraphic ()
+{
+    FILE* stream = fopen (STANDARD_GRAPHIC_ADR, "w");
+    if (stream == NULL)
+        EXIT_FUNC("NULL file", 1);
+
+    fprintf (stream, "set grid\n"
+             "set xlabel \"x\"\n"
+             "set ylabel \"y\"\n");
+    fclose (stream);
+    return 0;
+}
+
+// -------------------------------------------------------------------------------------------------------
+/**
+ @brief Функция записи поддерева в файла в формате GnuPlot
+ @param [in] stream Указатель на файл
+ @param [in] node Корень поддерева
+ @param [in] table_var Таблица переменных
+*/
+int pushGnuPlotFunc (FILE* stream,
+                     Node_t* node,
+                     NameTable_t* table_var)
+{
+    assert (node);
+    assert (stream);
+    assert (table_var);
+
+    if (node->type == _TYPE_NUM)
+    {
+        fprintf (stream, " %lg ", node->value.dval);
+        return 0;
+    }
+    if (node->type == _TYPE_VAR)
+    {
+        fprintf (stream, "%s", nameTableGetName (table_var, node->value.ival));
+        return 0;
+    }
+
+    int oper = node->value.ival;
+    if (GNUPLOT_COMAND[oper].type_push == ATOM_PRE_OPER)
+    {
+        fprintf (stream, "%s(", GNUPLOT_COMAND[oper].name);
+        pushGnuPlotFunc (stream, node->right, table_var);
+        fprintf (stream, ")");
+    }
+    else if (GNUPLOT_COMAND[oper].type_push == BIN_IN_OPER)
+    {
+        pushGnuPlotFunc (stream, node->left, table_var);
+        fprintf (stream, "%s", GNUPLOT_COMAND[oper].name);
+        pushGnuPlotFunc (stream, node->right, table_var);
+    }
+    else
+    {
+        fprintf (stream, "%s(", GNUPLOT_COMAND[oper].name);
+        pushGnuPlotFunc (stream, node->left, table_var);
+        fprintf (stream, ", ");
+        pushGnuPlotFunc (stream, node->right, table_var);
+        fprintf (stream, ")");
+    }
+
+    return 0;
+}
+// -------------------------------------------------------------------------------------------------------
+
+
+// -------------------------------------------------------------------------------------------------------
+/**
+ @brief Рекурсивная функция записи формулы по дереву для постройки графика
+ @param [in] tree Указатель на дерево
+*/
+int makeGraphicGnuPlot (BinTree_t* tree)
+{
+    assert (tree);
+
+    FILE* stream = fopen (STANDARD_GRAPHIC_ADR, "a");
+    if (stream == NULL)
+        EXIT_FUNC("NULL file", 1);
+
+    fprintf (stream, "y(x) =");
+    pushGnuPlotFunc (stream, tree->null, tree->table_var);
+
+    Node_t* buff = copyNode (tree->null, newNode ());
+    free (buff->parent);
+    buff->parent = NULL;
+
+    double x = getCoordSwing ();
+    tree->table_var->data[nameTableFind (tree->table_var, tree->diff_var)].value = x;
+    replaceNodeVar (tree->null, tree->table_var);
+    calculateNum (tree->null, &(tree->size));
+    double y = tree->null->value.dval;
+
+    Node_t* diff = diffNode (buff, newNode (), tree->diff_var, tree->table_var);
+    free (diff->parent);
+    deleteNode (buff);
+    diff->parent = NULL;
+
+    size_t size = (size_t) -1;
+    replaceNodeVar (diff, tree->table_var);
+    calculateNum (diff, &size);
+    double k = diff->value.dval;
+    free (diff);
+
+    double b = y - k * x;
+    fprintf (stream, "\ng(x) = %lg * x + %lg\n", k, b);
+    fprintf (stream, "plot f(x) lw2, g(x) lw2\n"
+             "pause -1\n");
+    fclose (stream);
+
+    char cmd[200] = "";
+    sprintf (cmd, "gnuplot %s", STANDARD_GRAPHIC_ADR);
+    int trash = system (cmd);
+    (void) trash;
+
+    return 0;
+}
+// -------------------------------------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------------------------------------
+/**
+ @brief Функция получения координаты точки касания
+ @return X точки касания
+*/
+double getCoordSwing (void)
+{
+    double x = 0;
+    while (true)
+    {
+        printf ("Введите X, для которого найдется касательная\n> ");
+        if (scanf ("%lf", &x) != 1)
+        {
+            printf ("Пожалуйста, повторите ввод\n");
+            continue;
+        }
+        break;
+    }
+
+    return x;
+}
+// -------------------------------------------------------------------------------------------------------

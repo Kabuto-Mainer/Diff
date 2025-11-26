@@ -3,65 +3,65 @@ Log file of program diff
 Info: Initialization of DIFF_Lib
 [LIB/DIFF-Func.cpp:27]
 Time start = 0
-Time call = 26022
-Time work = 26020
+Time call = 14738
+Time work = 14734
 
 Info: Creating DIFF_Tree_t
 [LIB/DIFF-Func.cpp:40]
 Time start = 0
-Time call = 26118
-Time work = 26116
+Time call = 14839
+Time work = 14834
 
 Info: Successfully creating
 [LIB/DIFF-Func.cpp:48]
 Time start = 0
-Time call = 26207
-Time work = 26206
+Time call = 14897
+Time work = 14895
 
 Info: Start uploading tree
 [LIB/DIFF-Func.cpp:67]
 Time start = 0
-Time call = 27607
-Time work = 27604
+Time call = 16000
+Time work = 15997
 
 Info: Uploading tree successful
 [LIB/DIFF-Func.cpp:69]
 Time start = 0
-Time call = 28576
-Time work = 28574
+Time call = 17319
+Time work = 17316
 
 Info: Start bring diff
 [LIB/DIFF-Func.cpp:86]
 Time start = 0
-Time call = 29140
-Time work = 29137
+Time call = 17964
+Time work = 17961
 
 Info: End bring diff
 [LIB/DIFF-Func.cpp:102]
 Time start = 0
-Time call = 31591
-Time work = 31589
+Time call = 20326
+Time work = 20323
 
 Info: Start making Taylor row
 [LIB/DIFF-Func.cpp:219]
 Time start = 0
-Time call = 31657
-Time work = 31655
+Time call = 20378
+Time work = 20376
 
 Info: End making Taylor row
 [LIB/DIFF-Func.cpp:225]
 Time start = 0
-Time call = 43517
-Time work = 43515
+Time call = 29536
+Time work = 29529
 
 Info: Start delete tree
 [LIB/DIFF-Func.cpp:117]
 Time start = 0
-Time call = 44332
-Time work = 44330
+Time call = 30376
+Time work = 30373
 
 Info: End delete tree
 [LIB/DIFF-Func.cpp:121]
 Time start = 0
-Time call = 44447
-Time work = 44443
+Time call = 30444
+Time work = 30442
