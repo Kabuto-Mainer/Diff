@@ -428,11 +428,13 @@ int dumpToLaTex (Node_t* node,
         EXIT_FUNC("NULL file", 1);
 
     fprintf (stream, "\\begin{dmath}\n");
-    if (reason != NULL)
-        fprintf (stream, "\\text{%s:} ", reason);
+    fprintf (stream, "\\text{");
+    if (reason != NULL)     { fprintf (stream, "%s", reason); }
+    else                    { printRandomPhraze (STANDARD_PHRAZE_ADR, stream); }
+    fprintf (stream, ": } \\frac {dx}{d}(");
 
     dumpNodeLaTex (node, stream, table_var);
-    fprintf (stream, "\n\\end{dmath}\n");
+    fprintf (stream, ")= 0\n\\end{dmath}\n");
 
     fclose (stream);
 
@@ -519,10 +521,13 @@ int cleanLaTex ()
              "\\usepackage[russian]{babel}\n"
              "\\usepackage{amsmath}\n"
              "\\usepackage{breqn}\n"
+             "\\usepackage{graphicx}\n"
+             "\\graphicspath{ {%s/} }\n"
             //  "\\usepackage{mathtools}\n"
              "\\usepackage{amssymb}\n"
              "\\usepackage{caption}\n"
-             "\\begin{document}\n");
+             "\\begin{document}\n",
+             STANDARD_GRAPHIC_PNG_ADR);
     fclose (stream);
 
     return 0;
@@ -542,6 +547,9 @@ int cleanDump ()
     char cmd[200] = "";
     sprintf (cmd, "mkdir %s/Image", STANDARD_DUMP_DIR_ADR);
     int trash = system (cmd);
+
+    sprintf (cmd, "mkdir %s/Graphic", STANDARD_DUMP_DIR_ADR);
+    trash = system (cmd);
     (void) trash;
 
     return 0;
@@ -582,6 +590,57 @@ int dumpNode (Node_t* node)
     if (node->type == _TYPE_NUM)    { printf ("VALUE [%lg]\n", node->value.dval); }
     else                            { printf ("VALUE [%d]\n", node->value.ival); }
     printf ("--------\n\n");
+
+    return 0;
+}
+// -------------------------------------------------------------------------------------------------------
+
+// -------------------------------------------------------------------------------------------------------
+/**
+ @brief Функция выведения случайной фразы из файла
+ @param [in] input_file Файл с фразами
+ @param [in] output_stream Файл, куда эта фраза запишется
+*/
+int printRandomPhraze (const char* input_file,
+                      FILE* output_stream)
+{
+    assert (input_ifile);
+    assert (output_stream);
+
+    FILE* stream = fopen (input_file, "r");
+    if (stream == NULL)
+        EXIT_FUNC("NULL file", 1);
+
+    size_t size = getFileSize (input_file);
+    char* buffer = (char*) calloc (size + 1, sizeof (char));
+    if (buffer == NULL)
+        EXIT_FUNC("NULL calloc", 1);
+
+    buffer[size - 1] = '\0';
+
+    fread (buffer, size, sizeof (char), stream);
+    fclose (stream);
+
+    char** mass_adr = (char**) calloc (size / 10, sizeof (char*));
+    if (mass_adr == NULL)
+        EXIT_FUNC("NULL calloc", 1);
+
+    size_t amount_str  = 0;
+    for (size_t i = 0; i < size; i++)
+    {
+        if (buffer[i] == '\n')
+        {
+            buffer[i] = '\0';
+            mass_adr[amount_str] = buffer + i + 1;
+            amount_str++;
+            continue;
+        }
+        if (buffer[i] == '\0')  { break; }
+    }
+    int number = int ((size_t) rand () / (RAND_MAX / amount_str));
+    fprintf (output_stream, "%s", mass_adr[number]);
+    free (mass_adr);
+    free (buffer);
 
     return 0;
 }

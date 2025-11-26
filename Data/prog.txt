@@ -1,1 +1,1 @@
-(* (1 nil  nil )(cos  nil (x  nil  nil )))
+(+ (* (1 nil  nil )(cos  nil (x  nil  nil )))(+ (* (0 nil  nil )(sin  nil (* (10 nil  nil )(x  nil  nil ))))(* (0.1 nil  nil )(* (+ (* (0 nil  nil )(x  nil  nil ))(* (10 nil  nil )(1 nil  nil )))(cos  nil (* (10 nil  nil )(x  nil  nil )))))))

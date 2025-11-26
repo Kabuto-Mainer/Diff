@@ -13,6 +13,10 @@
 #include "../../NameTable/NameTableFunc.h"
 
 // --------------------------------------------------------------------------------------------------
+static int AMOUNT_GRAPHICS = 0;
+// --------------------------------------------------------------------------------------------------
+
+// --------------------------------------------------------------------------------------------------
 /**
  @brief Функция дифференцирования дерева
  @param [in] old_tree Указатель на структуру старого дерева
@@ -69,11 +73,11 @@ Node_t* diffNode (Node_t* old_node,
     assert (name_var);
     assert (new_parent);
 
-    LATEX (old_node, table_var, "До взятия производной");
+    LATEX (old_node, table_var);
     Node_t* node = NULL;
     if (old_node->type == _TYPE_NUM)
     {
-        node = NUM_NODE_(0);
+        node = NUM_(0);
         return node;
     }
 
@@ -81,7 +85,7 @@ Node_t* diffNode (Node_t* old_node,
     {
         if (strcmp (table_var->data[old_node->value.ival].name, name_var) == 0)
         {
-            node = NUM_NODE_(1);
+            node = _1;
             return node;
         }
 
@@ -95,33 +99,33 @@ Node_t* diffNode (Node_t* old_node,
         case (SUB_OPER):   { node = SUB_(dL, dR); break; }
         case (MUL_OPER):   { node = ADD_( MUL_(dL, cR), MUL_(cL, dR) ); break; }
         case (DIV_OPER):   { node = DIV_( SUB_( MUL_(dL, cR), MUL_(cL, dR) ), MUL_(cR, cR)); break; }
-        case (SIN_OPER):   { node = COMPLEX_ ( COS_ (cR) ); break; }
-        case (COS_OPER):   { node = COMPLEX_ ( MUL_ ( SIN_ (cR), NUM_NODE_(-1) ) ); break; }
-        case (TAN_OPER):   { node = COMPLEX_ ( DIV_ (NUM_NODE_(1), POW_( COS_ (cR), NUM_NODE_(2)) ) ); break; }
-        case (COT_OPER):   { node = COMPLEX_ ( DIV_ (NUM_NODE_(-1), POW_( SIN_ (cR), NUM_NODE_(2)) ) ); break; }
-        case (ASIN_OPER):  { node = COMPLEX_ ( DIV_ (NUM_NODE_(1), POW_( SUB_( NUM_NODE_(1), POW_(cR, NUM_NODE_(2)) ), NUM_NODE_(0.5) ))); break; }
-        case (ACOS_OPER):  { node = COMPLEX_ ( DIV_ (NUM_NODE_(-1), POW_( SUB_( NUM_NODE_(1), POW_(cR, NUM_NODE_(2)) ), NUM_NODE_(0.5) ))); break; }
-        case (ATAN_OPER):  { node = COMPLEX_ ( DIV_ (NUM_NODE_(1), ADD_ (NUM_NODE_(1), POW_(cR, NUM_NODE_(2)) )) ); break; }
-        case (ACOT_OPER):  { node = COMPLEX_ ( DIV_ (NUM_NODE_(-1), ADD_ (NUM_NODE_(1), POW_(cR, NUM_NODE_(2)) )) ); break; }
-        case (LOG_OPER):   { node = COMPLEX_ ( DIV_ (NUM_NODE_(1), MUL_ (cR, LN_ (cL)) ) ); break; }
-        case (LN_OPER):    { node = COMPLEX_ ( DIV_ (NUM_NODE_(1), cR) ); break; }
-        case (POW_OPER):   { node = COMPLEX_ ( MUL_ (cR, POW_(cL, (SUB_ (cR, NUM_NODE_(1))) ))); break; }
-        case (EXP_OPER):   { node = COMPLEX_ ( EXP_ (cR) ); break; }
-        case (SH_OPER):    { node = COMPLEX_ ( CH_ (cR) ); break; }
-        case (CH_OPER):    { node = COMPLEX_ ( SH_ (cR) ); break; }
-        case (TH_OPER):    { node = COMPLEX_ ( DIV_ (NUM_NODE_(1), POW_(CH_(cR), NUM_NODE_(2)) )); break; }
-        case (CTH_OPER):   { node = COMPLEX_ ( DIV_ (NUM_NODE_(-1), POW_(SH_(cR), NUM_NODE_(2)) )); break; }
-        case (ASH_OPER):   { node = COMPLEX_ ( DIV_ (NUM_NODE_(1), POW_(ADD_(POW_(cR, NUM_NODE_(2)), NUM_NODE_(1)), NUM_NODE_(0.5)))); break; }
-        case (ACH_OPER):   { node = COMPLEX_ ( DIV_ (NUM_NODE_(1), POW_(SUB_(POW_(cR, NUM_NODE_(2)), NUM_NODE_(1)), NUM_NODE_(0.5)))); break; }
-        case (ATH_OPER):   { node = COMPLEX_ ( DIV_ (NUM_NODE_(1), SUB_(NUM_NODE_(1), POW_(cR, NUM_NODE_(2))) )); break; }
-        case (ACTH_OPER):  { node = COMPLEX_ ( DIV_ (NUM_NODE_(1), SUB_(NUM_NODE_(1), POW_(cR, NUM_NODE_(2))) )); break; }
+        case (SIN_OPER):   { node = COMPND_ ( COS_ (cR) ); break; }
+        case (COS_OPER):   { node = COMPND_ ( MUL_ ( SIN_ (cR), NUM_(-1) ) ); break; }
+        case (TAN_OPER):   { node = COMPND_ ( DIV_ (_1, POW_( COS_ (cR), _2) ) ); break; }
+        case (COT_OPER):   { node = COMPND_ ( DIV_ (NUM_(-1), POW_( SIN_ (cR), _2) ) ); break; }
+        case (ASIN_OPER):  { node = COMPND_ ( DIV_ (_1, POW_( SUB_( _1, POW_(cR, _2) ), NUM_(0.5) ))); break; }
+        case (ACOS_OPER):  { node = COMPND_ ( DIV_ (NUM_(-1), POW_( SUB_( _1, POW_(cR, _2) ), NUM_(0.5) ))); break; }
+        case (ATAN_OPER):  { node = COMPND_ ( DIV_ (_1, ADD_ (_1, POW_(cR, _2) )) ); break; }
+        case (ACOT_OPER):  { node = COMPND_ ( DIV_ (NUM_(-1), ADD_ (_1, POW_(cR, _2) )) ); break; }
+        case (LOG_OPER):   { node = COMPND_ ( DIV_ (_1, MUL_ (cR, LN_ (cL)) ) ); break; }
+        case (LN_OPER):    { node = COMPND_ ( DIV_ (_1, cR) ); break; }
+        case (POW_OPER):   { node = COMPND_ ( MUL_ (cR, POW_(cL, (SUB_ (cR, _1)) ))); break; }
+        case (EXP_OPER):   { node = COMPND_ ( EXP_ (cR) ); break; }
+        case (SH_OPER):    { node = COMPND_ ( CH_ (cR) ); break; }
+        case (CH_OPER):    { node = COMPND_ ( SH_ (cR) ); break; }
+        case (TH_OPER):    { node = COMPND_ ( DIV_ (_1, POW_(CH_(cR), _2) )); break; }
+        case (CTH_OPER):   { node = COMPND_ ( DIV_ (NUM_(-1), POW_(SH_(cR), _2) )); break; }
+        case (ASH_OPER):   { node = COMPND_ ( DIV_ (_1, POW_(ADD_(POW_(cR, _2), _1), NUM_(0.5)))); break; }
+        case (ACH_OPER):   { node = COMPND_ ( DIV_ (_1, POW_(SUB_(POW_(cR, _2), _1), NUM_(0.5)))); break; }
+        case (ATH_OPER):   { node = COMPND_ ( DIV_ (_1, SUB_(_1, POW_(cR, _2)) )); break; }
+        case (ACTH_OPER):  { node = COMPND_ ( DIV_ (_1, SUB_(_1, POW_(cR, _2)) )); break; }
 
         default: { }
     }
 
     node->left->parent = node;
     node->right->parent = node;
-    LATEX (node, table_var, "После взятия производной");
+    LATEX (node, table_var);
     return node;
 }
 // --------------------------------------------------------------------------------------------------
@@ -445,8 +449,9 @@ Node_t* abridgeNum (Node_t* node,
         return NULL;
     }
 
+    dumpNode (node);
     int oper = node->value.ival;
-    if (L->type == _TYPE_NUM && fabs (L->value.dval) < EPS)
+    if (L &&L->type == _TYPE_NUM && fabs (L->value.dval) < EPS)
     {
         if (oper == ADD_OPER)
         {
@@ -470,7 +475,7 @@ Node_t* abridgeNum (Node_t* node,
         }
     }
 
-    else if (R->type == _TYPE_NUM && fabs (R->value.dval) < EPS)
+    else if (R && R->type == _TYPE_NUM && fabs (R->value.dval) < EPS)
     {
         if (oper == ADD_OPER || oper == SUB_OPER)
         {
@@ -504,7 +509,7 @@ Node_t* abridgeNum (Node_t* node,
         }
     }
 
-    else if (L->type == _TYPE_NUM && fabs (L->value.dval - 1.0) < EPS)
+    else if (L && L->type == _TYPE_NUM && fabs (L->value.dval - 1.0) < EPS)
     {
         if (oper == MUL_OPER)
         {
@@ -528,7 +533,7 @@ Node_t* abridgeNum (Node_t* node,
         }
     }
 
-    else if (R->type == _TYPE_NUM && fabs (R->value.dval - 1.0) < EPS)
+    else if (R && R->type == _TYPE_NUM && fabs (R->value.dval - 1.0) < EPS)
     {
         if (oper == MUL_OPER || oper == DIV_OPER || oper == POW_OPER)
         {
@@ -582,6 +587,8 @@ int optimizeNode (Node_t* node,
     size_t old_size = *size;
     size_t new_size = *size;
 
+    printf ("ADR: %p\n", node);
+    dumpNode (node);
     do
     {
         old_size = new_size;
@@ -707,6 +714,7 @@ int makeTaylor (BinTree_t* tree)
         }
         deleteNode (old_node);
 
+        optimizeNode (diff_node, &size);
         old_node = copyNode (diff_node, all_parent);
         replaceNodeVar (diff_node, tree->table_var);
         optimizeNode (diff_node, &size);
@@ -751,9 +759,14 @@ int cleanGraphic ()
     if (stream == NULL)
         EXIT_FUNC("NULL file", 1);
 
-    fprintf (stream, "set grid\n"
+    AMOUNT_GRAPHICS++;
+    fprintf (stream, "set terminal png\n"
+             "set output \'%s/%d.png\'\n"
+             "set grid\n"
              "set xlabel \"x\"\n"
-             "set ylabel \"y\"\n");
+             "set ylabel \"y\"\n",
+             STANDARD_GRAPHIC_PNG_ADR,
+             AMOUNT_GRAPHICS);
     fclose (stream);
     return 0;
 }
@@ -813,7 +826,7 @@ int pushGnuPlotFunc (FILE* stream,
 
 // -------------------------------------------------------------------------------------------------------
 /**
- @brief Рекурсивная функция записи формулы по дереву для постройки графика
+ @brief Функция записи формулы по дереву для постройки графика
  @param [in] tree Указатель на дерево
 */
 int makeGraphicGnuPlot (BinTree_t* tree)
@@ -824,7 +837,7 @@ int makeGraphicGnuPlot (BinTree_t* tree)
     if (stream == NULL)
         EXIT_FUNC("NULL file", 1);
 
-    fprintf (stream, "y(x) =");
+    fprintf (stream, "f(x) =");
     pushGnuPlotFunc (stream, tree->null, tree->table_var);
 
     Node_t* buff = copyNode (tree->null, newNode ());
@@ -850,7 +863,7 @@ int makeGraphicGnuPlot (BinTree_t* tree)
 
     double b = y - k * x;
     fprintf (stream, "\ng(x) = %lg * x + %lg\n", k, b);
-    fprintf (stream, "plot f(x) lw2, g(x) lw2\n"
+    fprintf (stream, "plot f(x), g(x)\n"
              "pause -1\n");
     fclose (stream);
 
@@ -858,6 +871,19 @@ int makeGraphicGnuPlot (BinTree_t* tree)
     sprintf (cmd, "gnuplot %s", STANDARD_GRAPHIC_ADR);
     int trash = system (cmd);
     (void) trash;
+
+    FILE* latex = fopen (STANDARD_DUMP_LATEX_ADR, "a");
+    if (latex == NULL)
+        EXIT_FUNC("NULL file", 1);
+
+    fprintf (latex, "\\includegraphics{%d}\n", AMOUNT_GRAPHICS);
+    // fprintf (latex, "\\begin{figure}[h]\n"
+    //          "\\centering\n"
+    //          "\\includegraphics[width=0.7\textwidth]{%s/%d.png}\n"
+    //          "\\caption{График функции с касательной}\n"
+    //          "\\label{fig:myimg}\n"
+    //          "\\end{figure}\n", STANDARD_GRAPHIC_PNG_ADR, AMOUNT_GRAPHICS);
+    fclose (latex);
 
     return 0;
 }

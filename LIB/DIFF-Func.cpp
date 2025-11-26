@@ -8,10 +8,10 @@
 #include <stdlib.h>
 
 #include "../BinTree/Header/BinTreeFunc.h"
-#include "../BinTree/Header/BinTreeCalcFunc.h"
+// #include "../BinTree/Header/BinTreeCalcFunc.h"
 #include "../BinTree/Header/BinTreeConfig.h"
-#include "../NameTable/NameTableFunc.h"
-#include "../NameTable/NameTableType.h"
+// #include "../NameTable/NameTableFunc.h"
+// #include "../NameTable/NameTableType.h"
 
 #include "DIFF_Func.h"
 #include "../Common/Common.h"
@@ -24,6 +24,7 @@ int DIFF_Init ()
 {
     cleanDump ();
     cleanLogFile ();
+    srand( unsigned (time (NULL)));
     DIFF_Inf ("Initialization of DIFF_Lib");
 
     return 0;
@@ -230,8 +231,19 @@ int DIFF_MakeTaylor (DIFF_Tree_t tree)
 }
 // ---------------------------------------------------------------------------------------------------
 
-// Node_t* createMulTaylor (const int number)
-// {
+// ---------------------------------------------------------------------------------------------------
+/**
+ @brief Функция проведения касательной к графику функции
+*/
+int DIFF_Swing (DIFF_Tree_t tree)
+{
+    assert (tree);
 
+    cleanGraphic ();
+    DIFF_Inf ("Start making swing");
+    makeGraphicGnuPlot (tree);
+    DIFF_Inf ("End making swing");
 
-// }
+    return 0;
+}
+// ---------------------------------------------------------------------------------------------------

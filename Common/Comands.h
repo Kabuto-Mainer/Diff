@@ -162,7 +162,7 @@ const OperPushFile_t GNUPLOT_COMAND[] =
     { "acot",   ATOM_PRE_OPER },
     { "log",    BIN_PRE_OPER  },
     { "ln",     ATOM_PRE_OPER },
-    { "pow",    BIN_PRE_OPER  },
+    { "**",     BIN_IN_OPER   },
     { "exp",    ATOM_PRE_OPER },
     { "sh",     ATOM_PRE_OPER },
     { "ch",     ATOM_PRE_OPER },
