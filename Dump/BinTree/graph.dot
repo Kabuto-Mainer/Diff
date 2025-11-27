@@ -6,34 +6,22 @@ digraph {
   node [shape=plaintext, style=filled, fontname="Helvetica"];
   edge [arrowhead=vee, arrowsize=0.6, penwidth=1.2];
 
-block_0x7b63ed5e0150 [shape=box, label=<
+block_0x7b8ee45e0190 [shape=box, label=<
 <TABLE CELLSPACING="0" CELLPADDING="4">
-<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x7b63ed5e0150</B></TD></TR>
-<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=0x7b63ed5e0190</TD></TR>
-<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Number</TD></TR>
-<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value=10</TD></TR>
+<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x7b8ee45e0190</B></TD></TR>
+<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=0x7b8ee45e01d0</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Variable</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value='x'(0)</TD></TR>
 <TR>
 <TD PORT="left" BGCOLOR="#ff7301ff">NIL</TD>
 <TD PORT="right" BGCOLOR="#08ff3aff">NIL</TD>
 </TR>
 </TABLE> >];
 
-block_0x7b63ed5e01d0 [shape=box, label=<
+block_0x7b8ee45e0210 [shape=box, label=<
 <TABLE CELLSPACING="0" CELLPADDING="4">
-<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x7b63ed5e01d0</B></TD></TR>
-<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=0x7b63ed5e0210</TD></TR>
-<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Number</TD></TR>
-<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value=5</TD></TR>
-<TR>
-<TD PORT="left" BGCOLOR="#ff7301ff">NIL</TD>
-<TD PORT="right" BGCOLOR="#08ff3aff">NIL</TD>
-</TR>
-</TABLE> >];
-
-block_0x7b63ed5e0250 [shape=box, label=<
-<TABLE CELLSPACING="0" CELLPADDING="4">
-<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x7b63ed5e0250</B></TD></TR>
-<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=0x7b63ed5e0210</TD></TR>
+<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x7b8ee45e0210</B></TD></TR>
+<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=0x7b8ee45e01d0</TD></TR>
 <TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Number</TD></TR>
 <TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value=15</TD></TR>
 <TR>
@@ -42,33 +30,32 @@ block_0x7b63ed5e0250 [shape=box, label=<
 </TR>
 </TABLE> >];
 
-block_0x7b63ed5e0210 [shape=box, label=<
+block_0x7b8ee45e01d0 [shape=box, label=<
 <TABLE CELLSPACING="0" CELLPADDING="4">
-<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x7b63ed5e0210</B></TD></TR>
-<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=0x7b63ed5e0190</TD></TR>
+<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x7b8ee45e01d0</B></TD></TR>
+<TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=0x7b8ee45e0150</TD></TR>
 <TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Operation</TD></TR>
 <TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value='*'(2)</TD></TR>
 <TR>
-<TD PORT="left" BGCOLOR="#ff7301ff">0x7b63ed5e01d0</TD>
-<TD PORT="right" BGCOLOR="#08ff3aff">0x7b63ed5e0250</TD>
+<TD PORT="left" BGCOLOR="#ff7301ff">0x7b8ee45e0190</TD>
+<TD PORT="right" BGCOLOR="#08ff3aff">0x7b8ee45e0210</TD>
 </TR>
 </TABLE> >];
 
-block_0x7b63ed5e0190 [shape=box, label=<
+block_0x7b8ee45e0150 [shape=box, label=<
 <TABLE CELLSPACING="0" CELLPADDING="4">
-<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x7b63ed5e0190</B></TD></TR>
+<TR><TD PORT="root" BGCOLOR="#0308f9ff" COLSPAN="2"><B>0x7b8ee45e0150</B></TD></TR>
 <TR><TD BGCOLOR="#b209ccff" COLSPAN="2">ROOT=NIL</TD></TR>
 <TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">type=Operation</TD></TR>
-<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value='+'(0)</TD></TR>
+<TR><TD BGCOLOR="#f46b8bff" COLSPAN="2">value='sin'(4)</TD></TR>
 <TR>
-<TD PORT="left" BGCOLOR="#ff7301ff">0x7b63ed5e0150</TD>
-<TD PORT="right" BGCOLOR="#08ff3aff">0x7b63ed5e0210</TD>
+<TD PORT="left" BGCOLOR="#ff7301ff">NIL</TD>
+<TD PORT="right" BGCOLOR="#08ff3aff">0x7b8ee45e01d0</TD>
 </TR>
 </TABLE> >];
 
-block_0x7b63ed5e0210:right -> block_0x7b63ed5e0250:root [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
-block_0x7b63ed5e0210:left -> block_0x7b63ed5e01d0:root [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
-block_0x7b63ed5e0190:right -> block_0x7b63ed5e0210:root [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
-block_0x7b63ed5e0190:left -> block_0x7b63ed5e0150:root [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x7b8ee45e01d0:right -> block_0x7b8ee45e0210:root [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x7b8ee45e01d0:left -> block_0x7b8ee45e0190:root [color="#ffffffff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
+block_0x7b8ee45e0150:right -> block_0x7b8ee45e01d0:root [color="#fefefeff", penwidth = 1.5, arrowsize = 0.6, constraint = true, dir = both];
 
 }

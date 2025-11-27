@@ -1,13 +1,13 @@
 Log file of program diff
-[18836][LIB/DIFF-Func.cpp:328]: 
+[16807][LIB/DIFF-Func.cpp:328]: 
 Inf: Initialization of DIFF_Lib
-[18927][LIB/DIFF-Func.cpp:341]: 
+[16913][LIB/DIFF-Func.cpp:341]: 
 Inf: Creating DIFF_Tree_t
-[19000][LIB/DIFF-Func.cpp:349]: 
+[17023][LIB/DIFF-Func.cpp:349]: 
 Inf: Successfully creating
-[20143][LIB/DIFF-Func.cpp:368]: 
+[18192][LIB/DIFF-Func.cpp:368]: 
 Inf: Start uploading tree
-[22302][LIB/DIFF-Func.cpp:370]: 
+[20246][LIB/DIFF-Func.cpp:370]: 
 Inf: Uploading tree successful
-[23262][LIB/DIFF-Func.cpp:387]: 
+[20925][LIB/DIFF-Func.cpp:387]: 
 Inf: Start bring diff
