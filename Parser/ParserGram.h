@@ -1,8 +1,12 @@
 #ifndef PARSER_FUNC_H
 #define PARSER_FUNC_H
 
-#include "ParserType.h"
 #include "../Common/AllTypes.h"
+#include "../Common/Common.h"
+
+#include "ParserType.h"
+#include "ParserConst.h"
+
 
 // ---------------------------------------------------------------------------------------------------
 /*
@@ -18,6 +22,20 @@
 */
 // ---------------------------------------------------------------------------------------------------
 
+// ---------------------------------------------------------------------------------------------------
+/// @brief Обработка синтаксических ошибок
+#define SYNTAX_ERROR(inf, error_type, ret_val)       \
+    do {                                        \
+        DIFF_Error ("Syntax error in parser");  \
+        printf ("Syntax error in: [# %s #]\n"   \
+                "Full string: [# %s #]\n"       \
+                "Desc error: %s\n",             \
+                *(inf->pose), inf->start_pose,  \
+                DESC_PARSER_ERROR[error_type]);      \
+        inf->error = error_type;                \
+        return ret_val;                         \
+    } while (false)
+// ---------------------------------------------------------------------------------------------------
 
 // ---------------------------------------------------------------------------------------------------
 /**

@@ -2,9 +2,9 @@
 #include <assert.h>
 #include <math.h>
 
+// #include "ParserType.h"
 #include "../BinTree/Header/BinTreeFunc.h"
 // #include "../Common/AllTypes.h"
-// #include "ParserType.h"
 #include "ParserGram.h"
 
 
@@ -68,6 +68,7 @@ Node_t* parserGetNumVar (ParserPlaceInf_t* inf)
             {
                 val_whole = val_whole * 10 + (double (**pose - '0'));
             }
+            ++ *pose;
         }
         node->left = NULL;
         node->right = NULL;
@@ -104,7 +105,7 @@ Node_t* parserGetBrackets (ParserPlaceInf_t* inf)
 
         ++ *pose;
     }
-    else    { node = parserGetNumVar (pose); }
+    else    { node = parserGetNumVar (inf); }
     return node;
 }
 // ---------------------------------------------------------------------------------------------------
@@ -163,7 +164,7 @@ Node_t* parserGetMulDiv (ParserPlaceInf_t* inf)
     while (**pose == '*' || **pose == '/')
     {
         bool is_mul = false;
-        if (**pose == '+')  { is_mul = true; }
+        if (**pose == '*')  { is_mul = true; }
         ++ *pose;
 
         Node_t* left = node;

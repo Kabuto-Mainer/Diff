@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include "assert.h"
 #include <sys/stat.h>
 #include <unistd.h>
@@ -6,11 +7,11 @@
 
 #include "Common.h"
 
-// ---------------------------------------------------------------------------------------------------
-/// @brief Время начала работы библиотеки
-static clock_t TIME_START = 0;
-// ---------------------------------------------------------------------------------------------------
-
+// // ---------------------------------------------------------------------------------------------------
+// /// @brief Время начала работы библиотеки
+// static clock_t TIME_START = 0;
+// // ---------------------------------------------------------------------------------------------------
+//
 
 // ---------------------------------------------------------------------------------------------------
 /// @brief Адрес log файла
@@ -109,10 +110,11 @@ int pushLogFile (const char* text,
         return 1;
     }
 
-    fprintf (stream, "[%ld][%15s:3%d]: %s\n")
-    fprintf (stream, "%s\n", text);
-    fprintf (stream, "[%s:%d]\nTime start = %ld\nTime call = %ld\nTime work = %ld\n",
-            file, line, TIME_START, clock (), clock () - TIME_START);
+    fprintf (stream, "[%ld][%15s:3%d]: %s\n",
+             clock (), file, line, text);
+    // fprintf (stream, "%s\n", text);
+    // fprintf (stream, "[%s:%d]\nTime start = %ld\nTime call = %ld\nTime work = %ld\n",
+    //         file, line, TIME_START, clock (), clock () - TIME_START);
 
     fclose (stream);
 

@@ -8,11 +8,13 @@ name-table =  NameTable/NameTableFunc.cpp
 
 common = 	  Common/Support.cpp
 
+parser = 	  Parser/ParserGram.cpp
+
 lib = 		  LIB/DIFF-Func.cpp
 
 # Компиляция akin
 diff:
-	g++ $(bin-tree) $(name-table) $(common) $(lib) main.cpp $(flags) -o diff.exe
+	g++ $(bin-tree) $(name-table) $(common) $(lib) $(parser) main.cpp $(flags) -o diff.exe
 
 # Запуск akin
 run-d:

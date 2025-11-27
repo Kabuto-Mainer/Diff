@@ -14,6 +14,9 @@
 #include "../Header/BinTreeFunc.h"
 #include "../../NameTable/NameTableFunc.h"
 
+#include "../../Parser/ParserType.h"
+#include "../../Parser/ParserGram.h"
+
 // ---------------------------------------------------------------------------------------------------
 /**
  @brief Функция создания бинарного дерева
@@ -199,7 +202,6 @@ int saveNode (FILE* stream,
 }
 // ---------------------------------------------------------------------------------------------------
 
-
 // ---------------------------------------------------------------------------------------------------
 /**
  @brief Функция загрузки дерева из файла
@@ -212,157 +214,23 @@ int binTreeUpload (BinTree_t* tree,
     assert (tree);
     assert (file);
 
-    size_t size_buffer = getFileSize (file);
-    char* buffer = (char*) calloc (size_buffer + 1, sizeof (char));
-    if (buffer == NULL)
-        EXIT_FUNC("NULL calloc", 1);
-
-    FILE* stream = fopen (file, "rb");
-    size_t trash = fread (buffer, sizeof (char), size_buffer, stream);
-    buffer[trash] = '\0';
-    fclose (stream);
+    char* buffer = createCharBuffer (file);
 
     binTreeDtr (tree);
     binTreeCtr (tree);
 
-    char* buffer_to_free = buffer;
-    tree->null = uploadNode (tree->null, &buffer, tree->table_var, tree->table_cmd);
-    if (tree->null != NULL)
-    {
-        free (tree->null->parent);
-        tree->null->parent = NULL;
-    }
-    free (buffer_to_free);
-    // Нулевой элемент необходим в дереве для его существования, но в загружено дереве он мешает
+    char* pose = buffer;
+    ParserPlaceInf_t inf = {};
+    inf.error = NOT_ERROR;
+    inf.pose = &pose;
+    inf.start_pose = buffer;
 
+    tree->null = parserGetGlobal (&inf);
+    tree->size = getSizeTree (tree->null);
+
+    binTreeDumpHTML (tree, "Дерево после загрузки");
     LATEX (tree->null, tree->table_var);
     return 0;
-}
-// ---------------------------------------------------------------------------------------------------
-
-// ---------------------------------------------------------------------------------------------------
-/**
- @brief Рекурсивная функция парсинга буфера
- @param [in] parent Указатель на родительский элемент
- @param [in] cur_pose Указатель на адрес хранения адреса текущего рассматриваемого символа
- @param [in] table_var Таблица имен переменных
- @param [in] table_cmd Таблица имен команд
- @return Указатель на новый узел в случае необходимости его создания, иначе NULL
-*/
-Node_t* uploadNode (Node_t* parent,
-                    char** cur_pose,
-                    NameTable_t* table_var,
-                    NameTable_t* table_cmd)
-{
-    assert (parent);
-    assert (cur_pose);
-    assert (*cur_pose);
-    assert (table_var);
-    assert (table_cmd);
-
-    skipVoid (cur_pose);
-    if (**cur_pose == '(')
-    {
-        Node_t* node = newNode ();
-        ++ *cur_pose; // Skip '('
-        skipVoid (cur_pose);
-
-        switch (**cur_pose)
-        {
-            case '+':
-            {
-                node->type = _TYPE_OPER;
-                node->value.ival = ADD_OPER;
-                ++ *cur_pose;
-                break;
-            }
-            case '-':
-            {
-                if (*(*cur_pose + 1) == ' ')
-                {
-                    node->type = _TYPE_OPER;
-                    node->value.ival = SUB_OPER;
-                    ++ *cur_pose;
-                }
-                else
-                {
-                    char* new_pose = NULL;
-                    node->type = _TYPE_NUM;
-                    node->value.dval = strtod (*cur_pose, &new_pose);
-                    *cur_pose = new_pose;
-                }
-                break;
-            }
-            case '*':
-            {
-                node->type = _TYPE_OPER;
-                node->value.ival = MUL_OPER;
-                ++ *cur_pose;
-                break;
-            }
-            case '/':
-            {
-                node->type = _TYPE_OPER;
-                node->value.ival = DIV_OPER;
-                ++ *cur_pose;
-                break;
-            }
-            default:
-            {
-                int index = 0;
-                if (isdigit (**cur_pose))
-                {
-                    char* new_pose = NULL;
-                    node->type = _TYPE_NUM;
-                    node->value.dval = strtod (*cur_pose, &new_pose);
-                    *cur_pose = new_pose;
-                }
-
-                else if ((index = nameTableFind (table_cmd, *cur_pose)) != -1)
-                {
-                    node->type = _TYPE_OPER;
-                    node->value.ival = index;
-                    *cur_pose += lenName (*cur_pose);
-                }
-
-                else if ((index = nameTableFind (table_var, *cur_pose)) == -1)
-                {
-                    node->type = _TYPE_VAR;
-                    node->value.ival = nameTableAdd (table_var, *cur_pose, 0, (size_t) lenName (*cur_pose));
-                    *cur_pose += lenName (*cur_pose);
-                }
-
-                else
-                {
-                    node->type = _TYPE_VAR;
-                    node->value.ival = index;
-                    *cur_pose += lenName (*cur_pose);
-                }
-            }
-        }
-
-        node->left = uploadNode (node, cur_pose, table_var, table_cmd);
-        node->right = uploadNode (node, cur_pose, table_var, table_cmd);
-        node->parent = parent;
-
-        skipVoid (cur_pose);
-        ++ *cur_pose;
-        return node;
-    }
-
-    else
-    {
-        if (strncmp ("nil", *cur_pose, 3) == 0)
-        {
-            *cur_pose += 3; // strlen ("nil")
-            return NULL;
-        }
-
-        printf ("ERROR in syntax: %s\n", *cur_pose);
-        return NULL;
-    }
-
-    return NULL;
 }
 // ---------------------------------------------------------------------------------------------------
 
