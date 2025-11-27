@@ -64,6 +64,33 @@ size_t getFileSize (const char* name_file)
 
 // ---------------------------------------------------------------------------------------------------
 /**
+ @brief Функция загрузки содержимого файла в буфер
+ @param [in] name_file Имя загружаемого файла
+ @return Указатель на выделенную динамически память
+*/
+char* createCharBuffer (const char* name_file)
+{
+    assert (name_file);
+
+    size_t size = getFileSize (name_file);
+    char* buffer  = (char*) calloc (size + 1, sizeof (char));
+    if (buffer == NULL)
+        EXIT_FUNC("NULL calloc", NULL);
+
+    FILE* stream = fopen (name_file, "r");
+    if (stream == NULL)
+        EXIT_FUNC("NULL file", NULL);
+
+    size_t amount_checks = fread (buffer, sizeof (char), size, stream);
+    fclose (stream);
+    buffer[amount_checks] = '\0';
+
+    return buffer;
+}
+// ---------------------------------------------------------------------------------------------------
+
+// ---------------------------------------------------------------------------------------------------
+/**
  @brief Функция отправки информации в лог файл
  @param [in] text Текст сообщения
  @param [in] file Файл откуда произошел вызов
@@ -82,6 +109,7 @@ int pushLogFile (const char* text,
         return 1;
     }
 
+    fprintf (stream, "[%ld][%15s:3%d]: %s\n")
     fprintf (stream, "%s\n", text);
     fprintf (stream, "[%s:%d]\nTime start = %ld\nTime call = %ld\nTime work = %ld\n",
             file, line, TIME_START, clock (), clock () - TIME_START);
@@ -91,7 +119,6 @@ int pushLogFile (const char* text,
     return 0;
 }
 // ---------------------------------------------------------------------------------------------------
-
 
 // ---------------------------------------------------------------------------------------------------
 /**
