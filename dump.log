@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.11.26)  26 NOV 2025 18:38
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.11.26)  28 NOV 2025 11:58
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -573,133 +573,53 @@ File: umsb.fd 2013/01/14 v3.01 AMS symbols B
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
-Underfull \hbox (badness 10000) in paragraph at lines 89--89
- []$[][]\OT1/cmr/m/n/12 ([] \OML/cmm/m/it/12 x \OMS/cmsy/m/n/12 ^^A ^^@\OT1/cmr
-/m/n/12 1 \OMS/cmsy/m/n/12 ^^A ^^@\OT1/cmr/m/n/12 1) = 0|$ 
- []
-
-
 
 [2]
-
-[3]
-Underfull \hbox (badness 10000) in paragraph at lines 161--161
- []$[][]\OT1/cmr/m/n/12 ([] \OML/cmm/m/it/12 x \OMS/cmsy/m/n/12 ^^A ^^@\OT1/cmr
-/m/n/12 1) = 0|$ 
- []
-
-
-
-[4]
-
-[5]
-Underfull \hbox (badness 10000) in paragraph at lines 239--239
- []$[][]\OT1/cmr/m/n/12 ([] \OML/cmm/m/it/12 x \OMS/cmsy/m/n/12 ^^A ^^@\OT1/cmr
-/m/n/12 1 \OMS/cmsy/m/n/12 ^^A ^^@\OT1/cmr/m/n/12 1) = 0|$ 
- []
-
-
-
-[6]
-Underfull \hbox (badness 10000) in paragraph at lines 275--275
- []$[][]\OT1/cmr/m/n/12 ([] \OML/cmm/m/it/12 x \OMS/cmsy/m/n/12 ^^A ^^@\OT1/cmr
-/m/n/12 1 \OMS/cmsy/m/n/12 ^^A ^^@\OT1/cmr/m/n/12 1 \OMS/cmsy/m/n/12 ^^A ^^@\OT
-1/cmr/m/n/12 1 \OMS/cmsy/m/n/12 ^^A ^^@\OT1/cmr/m/n/12 1) = 0|$ 
- []
-
-
-
-[7]
-Underfull \hbox (badness 10000) in paragraph at lines 293--293
- []$[][]\OT1/cmr/m/n/12 ([] \OML/cmm/m/it/12 x \OMS/cmsy/m/n/12 ^^A ^^@\OT1/cmr
-/m/n/12 1) = 0|$ 
- []
-
-
-
-[8]
-<Dump/BinTree/Graphic/1.png, id=32, 481.8pt x 361.35pt>
+<Dump/BinTree/Graphic/1.png, id=13, 481.8pt x 361.35pt>
 File: Dump/BinTree/Graphic/1.png Graphic file (type png)
 <use Dump/BinTree/Graphic/1.png>
-Package pdftex.def Info: Dump/BinTree/Graphic/1.png  used on input line 328.
+Package pdftex.def Info: Dump/BinTree/Graphic/1.png  used on input line 141.
 (pdftex.def)             Requested size: 481.79881pt x 361.34912pt.
 
-Overfull \hbox (91.79881pt too wide) in paragraph at lines 328--329
+Overfull \hbox (91.79881pt too wide) in paragraph at lines 140--142
 [] 
  []
 
 
-
-[9]
-Underfull \hbox (badness 10000) in paragraph at lines 334--334
- []$[][]\OT1/cmr/m/n/12 (2\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 48016\OML/cmm/m/it/
-12 e \OMS/cmsy/m/n/12 ^^@ \OT1/cmr/m/n/12 05 \OMS/cmsy/m/n/12 ^^A \OML/cmm/m/it
-/12 x[]\OT1/cmr/m/n/12 ) = 0|$ 
- []
-
-
-Underfull \hbox (badness 10000) in paragraph at lines 343--343
- []$[][]\OT1/cmr/m/n/12 (1 \OMS/cmsy/m/n/12 ^^A \OT1/cmr/m/n/12 8 \OMS/cmsy/m/n
-/12 ^^A \OML/cmm/m/it/12 x[]\OT1/cmr/m/n/12 ) = 0|$ 
+Underfull \hbox (badness 10000) in paragraph at lines 144--144
+ []$[][]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 x \OT1/cmr/m/n/12 + (\OMS/cmsy/m/n/12
+ ^^@\OT1/cmr/m/n/12 0\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 166667) \OMS/cmsy/m/n/12
+ ^^A \OML/cmm/m/it/12 x[] \OT1/cmr/m/n/12 + 0\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 
+00833333 \OMS/cmsy/m/n/12 ^^A \OML/cmm/m/it/12 x[]\OT1/cmr/m/n/12 ) = 0|$ 
  []
 
 
 
-[10 <./Dump/BinTree/Graphic/1.png (PNG copy)>]
-Underfull \hbox (badness 10000) in paragraph at lines 367--367
- []$[][]\OT1/cmr/m/n/12 (\OMS/cmsy/m/n/12 ^^@\OT1/cmr/m/n/12 0\OML/cmm/m/it/12 
-:\OT1/cmr/m/n/12 00138889) = 0|$ 
- []
+[3]
 
-
-Underfull \hbox (badness 10000) in paragraph at lines 376--376
- []$[][]\OT1/cmr/m/n/12 (0\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 0416667 \OMS/cmsy/m
-/n/12 ^^A \OML/cmm/m/it/12 x[]\OT1/cmr/m/n/12 ) = 0|$ 
- []
-
-
-
-[11]
-
-[12]
-<Dump/BinTree/Graphic/2.png, id=47, 481.8pt x 361.35pt>
-File: Dump/BinTree/Graphic/2.png Graphic file (type png)
-<use Dump/BinTree/Graphic/2.png>
-Package pdftex.def Info: Dump/BinTree/Graphic/2.png  used on input line 431.
-(pdftex.def)             Requested size: 481.79881pt x 361.34912pt.
-
-Overfull \hbox (91.79881pt too wide) in paragraph at lines 431--432
-[] 
- []
-
-
-
-[13]
-
-[14 <./Dump/BinTree/Graphic/2.png (PNG copy)>] (./dump.aux)
+[4 <./Dump/BinTree/Graphic/1.png (PNG copy)>] (./dump.aux)
  ***********
 LaTeX2e <2024-11-01> patch level 2
 L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 6456 strings out of 474645
- 99736 string characters out of 5759192
- 504920 words of memory out of 5000000
- 29417 multiletter control sequences out of 15000+600000
+ 6445 strings out of 474645
+ 99454 string characters out of 5759192
+ 502920 words of memory out of 5000000
+ 29406 multiletter control sequences out of 15000+600000
  564284 words of font info for 55 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
- 72i,5n,86p,473b,241s stack positions out of 10000i,1000n,20000p,200000b,200000s
+ 72i,5n,86p,249b,241s stack positions out of 10000i,1000n,20000p,200000b,200000s
  </home/kabuto/.texlive/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1200.600pk></
 usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texm
 f-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/ty
 pe1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmsy10.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmsy8.p
-fb>
-Output written on dump.pdf (14 pages, 114418 bytes).
+nts/cm/cmsy10.pfb>
+Output written on dump.pdf (4 pages, 85496 bytes).
 PDF statistics:
- 128 PDF objects out of 1000 (max. 8388607)
- 52 compressed objects within 1 object stream
+ 107 PDF objects out of 1000 (max. 8388607)
+ 26 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
- 11 words of extra memory for PDF output out of 10000 (max. 10000000)
+ 6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

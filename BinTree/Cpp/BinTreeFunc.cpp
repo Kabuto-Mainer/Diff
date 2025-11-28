@@ -227,6 +227,7 @@ int binTreeUpload (BinTree_t* tree,
 
     tree->null = parserGetGlobal (&inf, tree->table_var, tree->table_cmd);
     tree->size = getSizeTree (tree->null);
+    free (buffer);
 
     binTreeDumpHTML (tree, "Дерево после загрузки");
     LATEX (tree->null, tree->table_var);

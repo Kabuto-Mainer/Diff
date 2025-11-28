@@ -471,7 +471,11 @@ int dumpNodeLaTex (Node_t* node,
 
     if (node->type == _TYPE_OPER)       { fprintf (stream, " %s ", LATEX_COMAND[node->value.ival]); }
     else if (node->type == _TYPE_VAR)   { fprintf (stream, " %s ", nameTableGetName (table_var, node->value.ival)); }
-    else                                { fprintf (stream, " %lg ", node->value.dval); }
+    else
+    {
+        if (node->value.dval < 0)   { fprintf (stream, " (%lg) ", node->value.dval); }
+        else                        { fprintf (stream, " %lg ", node->value.dval); }
+    }
 
     if (node->type == _TYPE_OPER && node->value.ival == POW_OPER)
     {

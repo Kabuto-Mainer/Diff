@@ -9,6 +9,7 @@
 #include "../Header/BinTreeType.h"
 #include "../Header/BinTreeDSL.h"
 #include "../Header/BinTreeConfig.h"
+#include "../Header/BinTreeConst.h"
 
 #include "../../NameTable/NameTableFunc.h"
 
@@ -449,7 +450,7 @@ Node_t* abridgeNum (Node_t* node,
         return NULL;
     }
 
-    dumpNode (node);
+    // dumpNode (node);
     int oper = node->value.ival;
     if (L &&L->type == _TYPE_NUM && fabs (L->value.dval) < EPS)
     {
@@ -588,7 +589,7 @@ int optimizeNode (Node_t* node,
     size_t new_size = *size;
 
     printf ("ADR: %p\n", node);
-    dumpNode (node);
+    // dumpNode (node);
     do
     {
         old_size = new_size;
@@ -683,6 +684,10 @@ int makeTaylor (BinTree_t* tree)
 {
     assert (tree);
 
+    if (tree->diff_var == NULL)
+    {
+        getVarDiff (tree);
+    }
     int index_var = nameTableFind (tree->table_var, tree->diff_var);
     tree->table_var->data[index_var].value = 0.0;
 
@@ -695,23 +700,36 @@ int makeTaylor (BinTree_t* tree)
 
     size_t size = (size_t) -1;
 
+    cleanGraphic ();
     FILE* stream = fopen (STANDARD_DUMP_LATEX_ADR, "a");
     if (stream == NULL)
         EXIT_FUNC ("NULL file", 1);
 
+    FILE* gnuplot = fopen (STANDARD_GRAPHIC_ADR, "a");
+    if (gnuplot == NULL)
+        EXIT_FUNC("NULL file", 1);
+
+    fprintf (gnuplot, "f(x) =");
+    pushGnuPlotFunc (gnuplot, tree->null, tree->table_var);
+    fprintf (gnuplot, "\n");
+
     double power_count = 0;
     for (int i = 0; i < POWER_TAYLOR; i++)
     {
+        char text[200] = "";
         if (i != 0)
         {
             diff_node = diffNode (old_node, all_parent, tree->diff_var, tree->table_var);
             diff_node->parent = NULL;
-            LATEX (diff_node, tree->table_var, "Производная для построения Тейлора");
+            sprintf (text, "%d производная для построения Тейлора", i);
+            LATEX (diff_node, tree->table_var, text);
         }
         else
         {
             diff_node = copyNode (tree->null, all_parent);
             diff_node->parent = NULL;
+            sprintf (text, "Нулевая производная для построения Тейлора");
+            LATEX (diff_node, tree->table_var, text);
         }
         deleteNode (old_node);
 
@@ -730,6 +748,14 @@ int makeTaylor (BinTree_t* tree)
                  (createVarNode (result, index_var), power, all_parent, POW_OPER), all_parent, MUL_OPER), all_parent, ADD_OPER);
         result->parent = NULL;
         optimizeNode (result, &size);
+
+        fprintf (stream, "\n\\begin{equation}\n");
+        fprintf (stream, "f{%d}(x)=", i);
+        dumpNodeLaTex (result, stream, tree->table_var);
+        fprintf (stream, "+o(x^%d)\n\\end{equation}\n", i);
+        fprintf (gnuplot, "f%d(x) =", i);
+        pushGnuPlotFunc (gnuplot, result, tree->table_var);
+        fprintf (gnuplot, "\n");
     }
     free (all_parent);
     deleteNode (old_node);
@@ -737,11 +763,36 @@ int makeTaylor (BinTree_t* tree)
     result->left->parent = result;
     result->right->parent = result;
 
-    fprintf (stream, "\n\\begin{equation}\n");
-    fprintf (stream, "f(x)=");
-    dumpNodeLaTex (result, stream, tree->table_var);
-    fprintf (stream, "+o(x^%d)\n\\end{equation}\n", POWER_TAYLOR - 1);
+    fprintf (gnuplot, "plot \\\n");
+    fprintf (gnuplot, "    f(x) lt rgb \"#000000\" title \"Сама функция\",\\\n");
+    for (int i = 0; i < POWER_TAYLOR; i++)
+    {
+        fprintf (gnuplot, "     f%d(x) lt rgb \"%s\" title \"Тейлор до %d\"",
+                 i, COLOR_TAYLOR[i], i);
+        if (i != POWER_TAYLOR - 1)
+        {
+            fprintf (gnuplot, ",\\\n");
+        }
+        else
+        {
+            fprintf (gnuplot, "\n");
+        }
+    }
     fclose (stream);
+    fclose (gnuplot);
+
+    char cmd[200] = "";
+    sprintf (cmd, "gnuplot %s", STANDARD_GRAPHIC_ADR);
+    int trash = system (cmd);
+    (void) trash;
+
+    FILE* latex = fopen (STANDARD_DUMP_LATEX_ADR, "a");
+    if (latex == NULL)
+        EXIT_FUNC("NULL file", 1);
+
+    fprintf (latex, "\\includegraphics{%d}\n", AMOUNT_GRAPHICS);
+    fclose (latex);
+
 
     tree->null = result;
     tree->size = getSizeTree (result);
