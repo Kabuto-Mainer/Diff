@@ -1,19 +1,19 @@
 Log file of program diff
-[10170][LIB/DIFF-Func.cpp:328]: 
+[10146][LIB/DIFF-Func.cpp:328]: 
 Inf: Initialization of DIFF_Lib
-[10222][LIB/DIFF-Func.cpp:341]: 
+[10200][LIB/DIFF-Func.cpp:341]: 
 Inf: Creating DIFF_Tree_t
-[10266][LIB/DIFF-Func.cpp:349]: 
+[10278][LIB/DIFF-Func.cpp:349]: 
 Inf: Successfully creating
-[10972][LIB/DIFF-Func.cpp:368]: 
+[10957][LIB/DIFF-Func.cpp:368]: 
 Inf: Start uploading tree
-[12263][LIB/DIFF-Func.cpp:370]: 
+[12047][LIB/DIFF-Func.cpp:370]: 
 Inf: Uploading tree successful
-[12623][LIB/DIFF-Func.cpp:3220]: 
+[12471][LIB/DIFF-Func.cpp:3220]: 
 Inf: Start making Taylor row
-[16625][LIB/DIFF-Func.cpp:3226]: 
+[16273][LIB/DIFF-Func.cpp:3226]: 
 Inf: End making Taylor row
-[17211][LIB/DIFF-Func.cpp:3118]: 
+[16814][LIB/DIFF-Func.cpp:3118]: 
 Inf: Start delete tree
-[17333][LIB/DIFF-Func.cpp:3122]: 
+[16937][LIB/DIFF-Func.cpp:3122]: 
 Inf: End delete tree

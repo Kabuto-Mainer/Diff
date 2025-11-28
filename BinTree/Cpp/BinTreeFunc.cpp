@@ -225,6 +225,7 @@ int binTreeUpload (BinTree_t* tree,
     inf.pose = &pose;
     inf.start_pose = buffer;
 
+    deleteNode (tree->null);
     tree->null = parserGetGlobal (&inf, tree->table_var, tree->table_cmd);
     tree->size = getSizeTree (tree->null);
     free (buffer);
