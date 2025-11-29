@@ -1,4 +1,4 @@
-This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.11.26)  28 NOV 2025 12:03
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (TeX Live 2026/dev/Arch Linux) (preloaded format=pdflatex 2025.11.26)  29 NOV 2025 13:15
 entering extended mode
  restricted \write18 enabled.
  %&-line parsing enabled.
@@ -557,42 +557,45 @@ e
 ))
 Package caption Info: Begin \AtBeginDocument code.
 Package caption Info: End \AtBeginDocument code.
-LaTeX Font Info:    Trying to load font information for U+msa on input line 12.
-
-
-(/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
-File: umsa.fd 2013/01/14 v3.01 AMS symbols A
-)
-LaTeX Font Info:    Trying to load font information for U+msb on input line 12.
-
-
-(/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
-File: umsb.fd 2013/01/14 v3.01 AMS symbols B
-)
-Underfull \hbox (badness 10000) in paragraph at lines 41--41
- []$[][]\OT1/cmr/m/n/12 (1 \OMS/cmsy/m/n/12 ^^A [] \OML/cmm/m/it/12 x \OMS/cmsy
-/m/n/12 ^^A \OT1/cmr/m/n/12 (\OMS/cmsy/m/n/12 ^^@\OT1/cmr/m/n/12 1)) = 0|$ 
- []
-
 
 
 [1
 
 {/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map}]
+LaTeX Font Info:    Trying to load font information for U+msa on input line 18.
+
+
+(/usr/share/texmf-dist/tex/latex/amsfonts/umsa.fd
+File: umsa.fd 2013/01/14 v3.01 AMS symbols A
+)
+LaTeX Font Info:    Trying to load font information for U+msb on input line 18.
+
+
+(/usr/share/texmf-dist/tex/latex/amsfonts/umsb.fd
+File: umsb.fd 2013/01/14 v3.01 AMS symbols B
+)
+Underfull \hbox (badness 10000) in paragraph at lines 53--53
+ []$[][]\OT1/cmr/m/n/12 ([] \OML/cmm/m/it/12 x \OMS/cmsy/m/n/12 ^^A \OT1/cmr/m/
+n/12 (\OMS/cmsy/m/n/12 ^^@\OT1/cmr/m/n/12 1)) = 0|$ 
+ []
+
+
+
+[1]
 
 [2]
-<Dump/BinTree/Graphic/1.png, id=13, 481.8pt x 361.35pt>
+<Dump/BinTree/Graphic/1.png, id=18, 481.8pt x 361.35pt>
 File: Dump/BinTree/Graphic/1.png Graphic file (type png)
 <use Dump/BinTree/Graphic/1.png>
-Package pdftex.def Info: Dump/BinTree/Graphic/1.png  used on input line 141.
+Package pdftex.def Info: Dump/BinTree/Graphic/1.png  used on input line 147.
 (pdftex.def)             Requested size: 481.79881pt x 361.34912pt.
 
-Overfull \hbox (91.79881pt too wide) in paragraph at lines 140--142
+Overfull \hbox (91.79881pt too wide) in paragraph at lines 146--148
 [] 
  []
 
 
-Underfull \hbox (badness 10000) in paragraph at lines 144--144
+Underfull \hbox (badness 10000) in paragraph at lines 150--150
  []$[][]\OT1/cmr/m/n/12 (\OML/cmm/m/it/12 x \OT1/cmr/m/n/12 + (\OMS/cmsy/m/n/12
  ^^@\OT1/cmr/m/n/12 0\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 166667) \OMS/cmsy/m/n/12
  ^^A \OML/cmm/m/it/12 x[] \OT1/cmr/m/n/12 + 0\OML/cmm/m/it/12 :\OT1/cmr/m/n/12 
@@ -610,22 +613,24 @@ L3 programming layer <2025-01-18>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 6445 strings out of 474645
- 99454 string characters out of 5759192
+ 6451 strings out of 474645
+ 99530 string characters out of 5759192
  502920 words of memory out of 5000000
- 29406 multiletter control sequences out of 15000+600000
- 564284 words of font info for 55 fonts, out of 8000000 for 9000
+ 29409 multiletter control sequences out of 15000+600000
+ 566715 words of font info for 58 fonts, out of 8000000 for 9000
  430 hyphenation exceptions out of 8191
  72i,5n,86p,249b,241s stack positions out of 10000i,1000n,20000p,200000b,200000s
- </home/kabuto/.texlive/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1200.600pk></
-usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texm
-f-dist/fonts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/ty
-pe1/public/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfo
-nts/cm/cmsy10.pfb>
-Output written on dump.pdf (4 pages, 86265 bytes).
+ </home/kabuto/.texlive/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1200.600pk> <
+/home/kabuto/.texlive/texmf-var/fonts/pk/ljfour/lh/lh-t2a/larm1728.600pk> </hom
+e/kabuto/.texlive/texmf-var/fonts/pk/ljfour/lh/lh-t2a/labx2488.600pk></usr/shar
+e/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi12.pfb></usr/share/texmf-dist/f
+onts/type1/public/amsfonts/cm/cmr12.pfb></usr/share/texmf-dist/fonts/type1/publ
+ic/amsfonts/cm/cmr8.pfb></usr/share/texmf-dist/fonts/type1/public/amsfonts/cm/c
+msy10.pfb>
+Output written on dump.pdf (5 pages, 99360 bytes).
 PDF statistics:
- 109 PDF objects out of 1000 (max. 8388607)
- 26 compressed objects within 1 object stream
+ 153 PDF objects out of 1000 (max. 8388607)
+ 36 compressed objects within 1 object stream
  0 named destinations out of 1000 (max. 500000)
  6 words of extra memory for PDF output out of 10000 (max. 10000000)
 

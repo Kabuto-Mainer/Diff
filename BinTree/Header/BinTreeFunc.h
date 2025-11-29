@@ -32,7 +32,7 @@
 #define TREE_LATEX(...) \
     GET_MACRO_TREE_DUMP(__VA_ARGS__, TREE_LATEX2, TREE_LATEX1)(__VA_ARGS__)
 
-/// @brief Дамп дерева в LaTex при отсутствии причины
+/// @brief Дамп дерева в LaTex при отсТейлораутствии причины
 #define TREE_LATEX1(tree)                   \
     do {                                    \
         binTreeDumpLaTex (tree, NULL);      \

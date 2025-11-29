@@ -17,7 +17,7 @@
     Brack   ::= '(' AddSub ')' | NumVar
     NumVar  ::= Num | Func | Var
     Num     ::= [0-9] {'.' && [0-9]}(if)
-    Func    ::= [nameFunc] && '(' AddSub {[','] && AddSub}(if) ')'
+    Func    ::= [nameFunc] && Num | Var | '(' AddSub {[','] && AddSub}(if) ')'
     Var     ::= [!nameFunc]
 */
 // ---------------------------------------------------------------------------------------------------

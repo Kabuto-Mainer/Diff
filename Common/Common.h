@@ -5,7 +5,7 @@
 /// @brief
 #define DIFF_War(__text__)                                          \
     do {                                                            \
-        pushLogFile ("\nWar: " __text__, __FILE__, __LINE__);   \
+        pushLogFile ("War: " __text__, __FILE__, __LINE__);   \
     } while (0)
 // ---------------------------------------------------------------------------------------------------
 
@@ -13,7 +13,7 @@
 /// @brief
 #define DIFF_Error(__text__)                                        \
     do {                                                            \
-        pushLogFile ("\nErr: " __text__, __FILE__, __LINE__);     \
+        pushLogFile ("Err: " __text__, __FILE__, __LINE__);     \
     } while (0)
 // ---------------------------------------------------------------------------------------------------
 
@@ -21,7 +21,7 @@
 /// @brief
 #define DIFF_Inf(__text__)                                          \
     do {                                                            \
-        pushLogFile ("\nInf: " __text__, __FILE__, __LINE__);       \
+        pushLogFile ("Inf: " __text__, __FILE__, __LINE__);       \
     } while (0)
 // ---------------------------------------------------------------------------------------------------
 

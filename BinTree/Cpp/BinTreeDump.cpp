@@ -530,8 +530,15 @@ int cleanLaTex ()
             //  "\\usepackage{mathtools}\n"
              "\\usepackage{amssymb}\n"
              "\\usepackage{caption}\n"
-             "\\begin{document}\n",
+             "\\begin{document}\n\n",
              STANDARD_GRAPHIC_PNG_ADR);
+
+    fprintf (stream, "\\begin{titlepage}\n"
+             "\\centering\n"
+             "{\\Huge\\bfseries Изи мат анализ для начинающих \\\\[0.5cm]}\n"
+             "{\\Large Отсчет по взятию огромной, просто необразимо большой производной функции}\\\\[2cm]\n"
+             "\\end{titlepage}\n");
+
     fclose (stream);
 
     return 0;
